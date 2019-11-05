@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name" translatable="false">AppDein</string>
+    <string name="registrarse">registrarse</string>
+    <string name="tel_fono">Teléfono</string>
+    <string name="Contraseña">Contraseña</string>
+    <string name="Nombre">Nombre</string>
+    <string name="Email">Email</string>
+    <string name="FechaNacimiento">Fecha de nacimiento</string>
+    <string name="Guardar">Guardar</string>
+    <string name="Registro">Registro</string>
+    <string name="numero_de_usuarios">Numero de usuarios:</string>
+    <string name="delete_validate">¿seguro que desea eliminarlo?</string>
+</resources>
