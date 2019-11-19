@@ -7,7 +7,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
+
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 public class FormularioActivity extends AppCompatActivity {
     private static final String FORM_ACTIVITY_TAG = FormularioActivity.class.getSimpleName();
@@ -17,10 +21,28 @@ public class FormularioActivity extends AppCompatActivity {
         Log.d(FORM_ACTIVITY_TAG, text);
     }
 
+    /* Solucion de Rafa
+    TextInputEditText nombreEditText = (TextInputEditText) findViewById(R.id.nombreDeLaVariable);
+    nombreEditText.setOnFocusChange(new View.onFocusChangedListenner);
+    @Override
+    public void onFocusChanged(View v, boolean hasFocus ){
+        if(!=hasFocus){
+            EditText et = (EditText);
+            if(et.getText().toString()){
+                TextInputLayout
+                nombreInputLayout
+            }else{
+
+            }
+        }
+    }*/
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formulario);
+        this.getSupportActionBar().setTitle("Formulario");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         button = (Button) findViewById(R.id.button);

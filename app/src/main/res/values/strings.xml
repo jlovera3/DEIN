@@ -8,6 +8,17 @@
     <string name="FechaNacimiento">Fecha de nacimiento</string>
     <string name="Guardar">Guardar</string>
     <string name="Registro">Registro</string>
-    <string name="numero_de_usuarios">Numero de usuarios:</string>
+    <string name="numero_de_usuarios">Numero de usuarios: 10</string>
     <string name="delete_validate">¿seguro que desea eliminarlo?</string>
+    <string name="action_settings">Sobre AppCRUD</string>
+    <string name="action_buscar">buscar</string>
+    <string name="action_nuevo">nuevo</string>
+    <string name="title_activity_about" translatable="false">AboutActivity</string>
+    <string name="action_config">Configuración</string>
+    <string name="action_order">Ordenar</string>
+    <string name="appdein" translatable="false">AppDein</string>
+    <string name="todo">TODO</string>
+    <string name="desarrolador_jaime_lovera_ulecia">Desarrolador: Jaime Lovera Ulecia</string>
+    <string name="contacto_ajlovera_iesfranciscodelosrios_es">Contacto: ajlovera@iesfranciscodelosrios.es</string>
+    <string name="title_activity_buscar">BuscarActivity</string>
 </resources>

@@ -9,7 +9,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".FormularioActivity" android:parentActivityName=".ListadoActivity"></activity>
+        <activity
+            android:name=".BuscarActivity"
+            android:label="@string/title_activity_buscar"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".AboutActivity"
+            android:label="@string/title_activity_about"
+            android:parentActivityName=".ListadoActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".FormularioActivity"
+            android:parentActivityName=".ListadoActivity" />
         <activity android:name=".ListadoActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
