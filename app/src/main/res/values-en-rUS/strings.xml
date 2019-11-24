@@ -19,4 +19,9 @@
     <string name="desarrolador_jaime_lovera_ulecia">Developer: JJaime Lovera Ulecia</string>
     <string name="title_activity_buscar">SearchActivity</string>
     <string name="todo">ALL</string>
+    <string name="app_dein">App DEIN</string>
+    <string name="abrir_galeria">open Gallery</string>
+    <string name="imagen_para_abrir_calendario">Open calendar</string>
+    <string name="recuerdame">Remember me</string>
+    <string name="registro_de_usuario">User Registration</string>
 </resources>

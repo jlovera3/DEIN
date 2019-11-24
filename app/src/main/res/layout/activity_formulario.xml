@@ -13,57 +13,89 @@
         android:layout_height="47dp"
         android:background="@color/colorPrimary"
         android:gravity="center"
-        android:text="Registro de Usuario"
+        android:text="@string/registro_de_usuario"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/editText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/editText"
-        android:layout_width="216dp"
-        android:layout_height="47dp"
-        android:drawableStart="@drawable/ic_action_email"
-        android:ems="10"
-        android:inputType="textEmailAddress"
-        android:hint="@string/Email"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputEmail"
+        android:layout_width="226dp"
+        android:layout_height="73dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="64dp"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.752"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.147" />
+        app:layout_constraintTop_toBottomOf="@+id/textView4">
 
-    <EditText
-        android:id="@+id/editText2"
-        android:layout_width="216dp"
-        android:layout_height="47dp"
-        android:layout_marginTop="20dp"
-        android:drawableStart="@drawable/ic_action_name"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="@string/Nombre"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editText"
+            android:layout_width="216dp"
+            android:layout_height="47dp"
+            android:drawableStart="@drawable/ic_action_email"
+            android:ems="10"
+            android:hint="@string/Email"
+            android:inputType="textEmailAddress"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.147" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputNombre"
+        android:layout_width="230dp"
+        android:layout_height="75dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@+id/textInputEmail">
 
-    <EditText
-        android:id="@+id/editText3"
-        android:layout_width="216dp"
-        android:layout_height="47dp"
-        android:layout_marginTop="16dp"
-        android:drawableStart="@drawable/ic_action_password"
-        android:ems="10"
-        android:inputType="textPassword"
-        android:hint="@string/Contraseña"
-        app:layout_constraintBottom_toBottomOf="parent"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editText2"
+            android:layout_width="222dp"
+            android:layout_height="46dp"
+            android:drawableStart="@drawable/ic_action_name"
+            android:ems="10"
+            android:hint="@string/Nombre"
+            android:inputType="textPersonName"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputContra"
+        android:layout_width="235dp"
+        android:layout_height="82dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.521"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText2"
-        app:layout_constraintVertical_bias="0.015" />
+        app:layout_constraintTop_toBottomOf="@+id/textInputNombre">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editText3"
+            android:layout_width="216dp"
+            android:layout_height="47dp"
+            android:layout_marginBottom="416dp"
+            android:drawableStart="@drawable/ic_action_password"
+            android:ems="10"
+            android:hint="@string/Contraseña"
+            android:inputType="textPassword"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.52"
+            app:layout_constraintStart_toStartOf="parent" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <EditText
         android:id="@+id/editText4"
@@ -77,48 +109,61 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText3"
+        app:layout_constraintTop_toBottomOf="@+id/textInputContra"
         app:layout_constraintVertical_bias="0.045" />
 
-    <EditText
-        android:id="@+id/editText5"
-        android:layout_width="217dp"
-        android:layout_height="47dp"
+    <LinearLayout
+        android:id="@+id/fechaLayout"
+        android:layout_width="236dp"
+        android:layout_height="57dp"
         android:layout_marginTop="20dp"
-        android:ems="10"
-        android:inputType="date"
-        android:drawableStart="@drawable/ic_action_date"
-        android:hint="@string/FechaNacimiento"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText4"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/editText4">
+
+        <EditText
+            android:id="@+id/editTextFecha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_action_date"
+            android:ems="10"
+            android:hint="@string/FechaNacimiento"
+            android:inputType="date" />
+
+        <ImageButton
+            android:id="@+id/fechaButtom"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            app:srcCompat="@android:drawable/ic_menu_my_calendar"
+            android:contentDescription="@string/imagen_para_abrir_calendario" />
+
+    </LinearLayout>
 
     <Switch
         android:id="@+id/switch1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Recuerdame  "
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="@string/recuerdame"
+        app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageButton"
-        app:layout_constraintVertical_bias="0.083"
         tools:text="Recuerdame  " />
 
     <ImageButton
         android:id="@+id/imageButton"
         android:layout_width="81dp"
         android:layout_height="64dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText5"
-        app:layout_constraintVertical_bias="0.083"
-        app:srcCompat="@android:drawable/ic_menu_gallery" />
+        app:layout_constraintTop_toBottomOf="@+id/fechaLayout"
+        app:srcCompat="@android:drawable/ic_menu_gallery"
+        android:contentDescription="@string/abrir_galeria" />
 
     <Button
         android:id="@+id/button"
@@ -128,7 +173,6 @@
         android:text="@string/Guardar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Spinner
@@ -140,6 +184,6 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/editText4"
         app:layout_constraintTop_toTopOf="@+id/editText4"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

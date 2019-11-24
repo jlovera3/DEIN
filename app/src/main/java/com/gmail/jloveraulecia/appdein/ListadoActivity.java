@@ -10,6 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+
 public class ListadoActivity extends AppCompatActivity {
     private static final String LIST_ACTIVITY_TAG = ListadoActivity.class.getSimpleName();
     private Button button;
@@ -26,13 +29,19 @@ public class ListadoActivity extends AppCompatActivity {
         this.getSupportActionBar().setTitle("Listado");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        button = (Button) findViewById(R.id.button2);
-        button.setOnClickListener(new View.OnClickListener() {
+
+
+        FloatingActionButton fab = findViewById(R.id.botonFlotante);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
+                Snackbar.make(view, "Abriendo actividad formulario", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
                 openFormularioActivity();
             }
         });
+
+
     }
     @Override
     public void onBackPressed(){
