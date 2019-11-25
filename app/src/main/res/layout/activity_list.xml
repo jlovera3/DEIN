@@ -25,15 +25,16 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="430dp"
-        android:layout_height="458dp"
+        android:layout_width="413dp"
+        android:layout_height="605dp"
         android:layout_marginTop="84dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.526"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:itemCount="8"
-        tools:listitem="@layout/recycler_view_item_1" />
+        tools:listitem="@layout/row_data" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/botonFlotante"

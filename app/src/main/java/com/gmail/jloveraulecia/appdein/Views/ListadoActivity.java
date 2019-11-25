@@ -1,4 +1,4 @@
-package com.gmail.jloveraulecia.appdein;
+package com.gmail.jloveraulecia.appdein.Views;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.gmail.jloveraulecia.appdein.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -22,6 +23,7 @@ public class ListadoActivity extends AppCompatActivity {
         Log.d(LIST_ACTIVITY_TAG, text);
 
     }
+    public void OnClickSearch(){ openBuscarActivity();}
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,9 +42,18 @@ public class ListadoActivity extends AppCompatActivity {
                 openFormularioActivity();
             }
         });
-
-
+/*
+        ActionMenuItem  b=findViewById(R.id.action_buscar);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Abriendo actividad buscar", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                openBuscarActivity();
+            }
+        });*/
     }
+
     @Override
     public void onBackPressed(){
         super.onBackPressed();
@@ -57,6 +68,12 @@ public class ListadoActivity extends AppCompatActivity {
     }
     public void openFormularioActivity(){
         Intent formIntent = new Intent(ListadoActivity.this, FormularioActivity.class);
+        startActivity(formIntent);
+        finish();
+    }
+
+    public void openBuscarActivity(){
+        Intent formIntent = new Intent(ListadoActivity.this, BuscarActivity.class);
         startActivity(formIntent);
         finish();
     }
@@ -79,6 +96,11 @@ public class ListadoActivity extends AppCompatActivity {
                 return true;
             case R.id.action_buscar:
                 Log.i("ActionBar", "Buscar!");;
+                try{
+                    Intent searchIntent = new Intent(ListadoActivity.this, BuscarActivity.class);
+                    startActivity(searchIntent);
+                    finish();
+                }catch (Exception E){}
                 return true;
             case R.id.action_settings:
                 Log.i("ActionBar", "Settings!");;

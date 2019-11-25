@@ -10,19 +10,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".BuscarActivity"
+            android:name=".Views.BuscarActivity"
             android:label="@string/title_activity_buscar"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".AboutActivity"
+            android:name=".Views.AboutActivity"
             android:label="@string/title_activity_about"
-            android:parentActivityName=".ListadoActivity"
+            android:parentActivityName=".Views.ListadoActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".FormularioActivity"
-            android:parentActivityName=".ListadoActivity" />
-        <activity android:name=".ListadoActivity" />
-        <activity android:name=".MainActivity">
+            android:name=".Views.FormularioActivity"
+            android:parentActivityName=".Views.ListadoActivity" />
+        <activity android:name=".Views.ListadoActivity" />
+        <activity android:name=".Views.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

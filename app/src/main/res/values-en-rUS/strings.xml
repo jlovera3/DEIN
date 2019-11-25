@@ -24,4 +24,6 @@
     <string name="imagen_para_abrir_calendario">Open calendar</string>
     <string name="recuerdame">Remember me</string>
     <string name="registro_de_usuario">User Registration</string>
+    <string name="BuscarPorEmail">Search by Email</string>
+    <string name="BuscarPorNombre">Search by Name</string>
 </resources>

@@ -26,4 +26,6 @@
     <string name="recuerdame">Recuerdame</string>
     <string name="imagen_para_abrir_calendario">Imagen para abrir calendario</string>
     <string name="abrir_galeria">Abrir galeria</string>
+    <string name="BuscarPorEmail">Buscar por Email</string>
+    <string name="BuscarPorNombre">Buscar por Nombre</string>
 </resources>

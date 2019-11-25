@@ -1,38 +1,52 @@
-package com.gmail.jloveraulecia.appdein;
+package com.gmail.jloveraulecia.appdein.Views;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
+import android.os.Handler;
 import android.util.Log;
+import android.view.WindowManager;
 
-public class AboutActivity extends AppCompatActivity {
-    private static final String ABOUT_ACTIVITY_TAG = AboutActivity.class.getSimpleName();
+import com.gmail.jloveraulecia.appdein.R;
+
+public class MainActivity extends AppCompatActivity {
+
+    private static final String ICON_ACTIVITY_TAG = MainActivity.class.getSimpleName();
+
 
     private void showLog(String text){
 
-        Log.d(ABOUT_ACTIVITY_TAG, text);
+        Log.d(ICON_ACTIVITY_TAG, text);
 
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_about);
+        try
+        {
+            this.getSupportActionBar().hide();
+        }
+        catch (NullPointerException e){
+
+        }
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setContentView(R.layout.activity_main);
+        showLog("Activity created");
+        new Handler().postDelayed(new Runnable(){
+            @Override
+            public void run(){
+                Intent listIntent = new Intent(MainActivity.this, ListadoActivity.class);
+                startActivity(listIntent);
+                finish();
+            }
+        },5000);
     }
 
     @Override
-    public void onBackPressed(){
-        Intent formIntent = new Intent(AboutActivity.this, ListadoActivity.class);
-        startActivity(formIntent);
-        finish();
-    }
 
-    @Override
-    public boolean onSupportNavigateUp(){
-        onBackPressed();
-        return false;
-    }
-
-    @Override
     protected void onRestart(){
 
         super.onRestart();//call to restart after onStop
