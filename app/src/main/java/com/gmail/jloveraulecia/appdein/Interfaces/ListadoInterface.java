@@ -1,19 +1,18 @@
 package com.gmail.jloveraulecia.appdein.Interfaces;
 
-
-import com.gmail.jloveraulecia.appdein.Models.Person;
-
-import java.util.ArrayList;
-
 public interface ListadoInterface {
-    public interface View{
+    interface View{
         void lanzarFormulario();
         void lanzarBuscado();
+        void lanzarFormularioBecauseRV(int id);
+
     }
 
-    public interface Presenter{
+    interface Presenter{
         void OnClickAdd();
         void OnClickSearch();
-        ArrayList<Person> getAllPerson();
+        int ChangeNumberOfUsers();
+        void onClickRecyclerView(int id);
+
     }
 }

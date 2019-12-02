@@ -7,7 +7,7 @@
     <string name="Nombre">Name</string>
     <string name="Registro">Register</string>
     <string name="delete_validate">¿are you sure?</string>
-    <string name="numero_de_usuarios">Number of users: 10</string>
+    <string name="numero_de_usuarios">"Number of users: "</string>
     <string name="registrarse">register</string>
     <string name="tel_fono">Phone</string>
     <string name="action_settings">About AppCrud</string>

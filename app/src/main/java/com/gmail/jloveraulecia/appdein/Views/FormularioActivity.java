@@ -1,9 +1,13 @@
 package com.gmail.jloveraulecia.appdein.Views;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,13 +18,19 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 
+import com.gmail.jloveraulecia.appdein.Interfaces.FormularioInterface;
+import com.gmail.jloveraulecia.appdein.Presenter.FormularioPresenter;
 import com.gmail.jloveraulecia.appdein.R;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Calendar;
 
-public class FormularioActivity extends AppCompatActivity {
+public class FormularioActivity extends AppCompatActivity implements FormularioInterface.View {
+    final private int CODE_READ_EXTERNAL_STORAGE_PERMISSION=123;
+    public FormularioPresenter presentador;
+    public static final int RESULT_GALLERY = 0;
+    private Context myContext;
 
     private static final String FORM_ACTIVITY_TAG = FormularioActivity.class.getSimpleName();
 
@@ -28,6 +38,7 @@ public class FormularioActivity extends AppCompatActivity {
     private Button button;
     private Spinner mySpinner;
     private ImageButton bfecha;
+    private ImageButton bImagen;
     private EditText textFecha;
     private int dia;
     private int mes;
@@ -60,6 +71,9 @@ public class FormularioActivity extends AppCompatActivity {
         this.getSupportActionBar().setTitle("Formulario");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        presentador = new FormularioPresenter(this);
+        myContext=this;
 
         //Spinner
         mySpinner = (Spinner)findViewById(R.id.spinner) ;
@@ -163,6 +177,16 @@ public class FormularioActivity extends AppCompatActivity {
             }
         });
 
+
+        //Boton de acceso a la galería. Llama al presentador para que acceda a los permisos.
+        bImagen = findViewById(R.id.imageButton);
+        bImagen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presentador.onClickImage(myContext);
+            }
+        });
+
     }
 
     @Override
@@ -243,4 +267,31 @@ public class FormularioActivity extends AppCompatActivity {
         showLog("Activity is being destroyed");
 
     }
+
+    @Override
+    public void lanzarError() {
+
+    }
+
+    @Override
+    public void requestPermission() {
+        ActivityCompat.requestPermissions(
+                FormularioActivity.this,
+                new String[] {
+                        Manifest.permission.READ_EXTERNAL_STORAGE},
+                CODE_READ_EXTERNAL_STORAGE_PERMISSION);
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case CODE_READ_EXTERNAL_STORAGE_PERMISSION:
+                presentador.resultPermission(grantResults[0]);
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
 }

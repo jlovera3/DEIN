@@ -1,8 +1,12 @@
 package com.gmail.jloveraulecia.appdein.Views;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -40,16 +44,22 @@ public class PersonAdapter
 
         private TextView TextView_email;
         private TextView TextView_nombre;
+        private ImageView ImageView_image;
 
         AcontecimientoViewHolder(View itemView) {
             super(itemView);
             TextView_nombre = (TextView) itemView.findViewById(R.id.TextView_Nombre);
             TextView_email = (TextView) itemView.findViewById(R.id.TextView_Email);
+            ImageView_image= (ImageView) itemView.findViewById(R.id.imageView);
         }
 
         void AcontecimientoBind(Person item) {
             TextView_nombre.setText(item.getUser());
             TextView_email.setText(item.getEmail());
+            //Convert de Base64 a Image
+            byte[] decodedString = Base64.decode(item.getImage(), Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            ImageView_image.setImageBitmap(decodedByte);
         }
     }
 

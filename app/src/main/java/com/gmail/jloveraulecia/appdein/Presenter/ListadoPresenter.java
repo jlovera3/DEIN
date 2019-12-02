@@ -1,6 +1,8 @@
 package com.gmail.jloveraulecia.appdein.Presenter;
 
 
+import android.widget.TextView;
+
 import com.gmail.jloveraulecia.appdein.Interfaces.ListadoInterface;
 import com.gmail.jloveraulecia.appdein.Models.PersonModel;
 import com.gmail.jloveraulecia.appdein.Models.Person;
@@ -9,7 +11,7 @@ import java.util.ArrayList;
 
 public class ListadoPresenter implements ListadoInterface.Presenter{
     private ListadoInterface.View view;
-    private PersonModel person;
+    private static PersonModel person;
 
     public ListadoPresenter(ListadoInterface.View view){
         this.view = view;
@@ -17,16 +19,33 @@ public class ListadoPresenter implements ListadoInterface.Presenter{
     }
 
     @Override
+    public void onClickRecyclerView(int id) {
+        view.lanzarFormularioBecauseRV(id);
+    }
+
+
+    @Override
     public void OnClickAdd(){
         view.lanzarFormulario();
     }
 
-    @Override
+    //HAY QUE IMPLEMENTAR UN METODO QUE MUESTRE UN TOAST AL ELIMINAR UN ELEMENTO
+
     public ArrayList<Person> getAllPerson(){
+        ChangeNumberOfUsers();
         return person.getAllPerson();
     }
 
-    public void OnClickSearch(){ view.lanzarBuscado();}
+
+    @Override
+    public void OnClickSearch(){
+        view.lanzarBuscado();
+    }
+
+    @Override
+    public int ChangeNumberOfUsers() {
+        return person.getAllPerson().size();
+    }
 
 
 }

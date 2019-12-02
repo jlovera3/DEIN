@@ -1,6 +1,8 @@
 package com.gmail.jloveraulecia.appdein.Views;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,14 +11,25 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
+import com.gmail.jloveraulecia.appdein.Interfaces.ListadoInterface;
+import com.gmail.jloveraulecia.appdein.Models.Person;
+import com.gmail.jloveraulecia.appdein.Presenter.ListadoPresenter;
 import com.gmail.jloveraulecia.appdein.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-public class ListadoActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class ListadoActivity extends AppCompatActivity implements ListadoInterface.View {
     private static final String LIST_ACTIVITY_TAG = ListadoActivity.class.getSimpleName();
     private Button button;
+    private RecyclerView listadoRecyclerView;
+    private PersonAdapter adaptador;
+    private ArrayList<Person> personList;
+    private ListadoPresenter presenter;
+
 
     private void showLog(String text){
 
@@ -42,16 +55,39 @@ public class ListadoActivity extends AppCompatActivity {
                 openFormularioActivity();
             }
         });
-/*
-        ActionMenuItem  b=findViewById(R.id.action_buscar);
-        b.setOnClickListener(new View.OnClickListener() {
+
+        presenter = new ListadoPresenter(this);
+
+        //Seguimos con el adaptador del click en usuarios
+        listadoRecyclerView = findViewById(R.id.recyclerView);
+
+        // Crea el Adaptador con los datos de la lista anterior
+        personList = presenter.getAllPerson();
+        adaptador = new PersonAdapter(personList);
+
+        // Asocia el Adaptador al RecyclerView
+        listadoRecyclerView.setAdapter(adaptador);
+
+        // Muestra el RecyclerView en vertical
+        listadoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        adaptador.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Abriendo actividad buscar", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                openBuscarActivity();
+            public void onClick(View v) {
+                // Accion al pulsar el elemento
+                int position = listadoRecyclerView.getChildAdapterPosition(v);
+                Log.d(LIST_ACTIVITY_TAG, "Click RV: " + personList.get(position).getId());
+                presenter.onClickRecyclerView(personList.get(position).getId());
             }
-        });*/
+        });
+
+
+
+
+        int a=presenter.ChangeNumberOfUsers();
+        TextView t=(TextView) findViewById(R.id.textView5);
+        t.setText("Numero de Usuarios: "+a);
+
     }
 
     @Override
@@ -174,5 +210,37 @@ public class ListadoActivity extends AppCompatActivity {
 
     }
 
+
+    @Override
+    public void lanzarFormulario() {
+        
+    }
+
+    @Override
+    public void lanzarBuscado() {
+
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+    @Override
+    public void lanzarFormularioBecauseRV(int id) {
+        Log.d(LIST_ACTIVITY_TAG, "Lanzando formulario desde RV...");
+        if(id == -1) {
+            // esto es launchForm() basicamente
+            Intent intent = new Intent(ListadoActivity.this, FormularioActivity.class);
+            startActivity(intent);
+        }
+        else {
+            Intent intent = new Intent(ListadoActivity.this, FormularioActivity.class);
+            //bundle
+            //TODO bundle para encapsular el id y pasarselo al activity
+            //TODO es un paquete en el que metemos variables cadena->valor cadena->valor
+            //TODO empaquetamos el id y luego en el formulario activity en el oncreate recuperamos el id. Al final del oncreate mejor
+            startActivity(intent);
+        }
+    }
 
 }

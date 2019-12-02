@@ -6,31 +6,33 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_weight="1"
         tools:srcCompat="@tools:sample/avatars[5]" />
 
     <LinearLayout
-        android:layout_width="285dp"
+        android:layout_width="346dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <TextView
             android:id="@+id/TextView_Nombre"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_weight="1"
-            android:ems="10"
-            android:text="@string/Nombre" />
+            android:layout_height="35dp"
+            android:text="@string/Nombre"
+            android:textColor="@color/colorPrimary" />
 
         <TextView
             android:id="@+id/TextView_Email"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_weight="1"
-            android:ems="10"
+            android:layout_height="35dp"
             android:text="@string/Email" />
     </LinearLayout>
 

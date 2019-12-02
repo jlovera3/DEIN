@@ -8,7 +8,7 @@
     <string name="FechaNacimiento">Fecha de nacimiento</string>
     <string name="Guardar">Guardar</string>
     <string name="Registro">Registro</string>
-    <string name="numero_de_usuarios">Numero de usuarios: 10</string>
+    <string name="numero_de_usuarios">"Numero de usuarios: "</string>
     <string name="delete_validate">¿seguro que desea eliminarlo?</string>
     <string name="action_settings">Sobre AppCRUD</string>
     <string name="action_buscar">buscar</string>
