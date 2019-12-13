@@ -4,7 +4,7 @@ public interface ListadoInterface {
     interface View{
         void lanzarFormulario();
         void lanzarBuscado();
-        void lanzarFormularioBecauseRV(int id);
+        void lanzarFormularioBecauseRV(int id,String e, String u);
 
     }
 
@@ -12,7 +12,7 @@ public interface ListadoInterface {
         void OnClickAdd();
         void OnClickSearch();
         int ChangeNumberOfUsers();
-        void onClickRecyclerView(int id);
+        void onClickRecyclerView(int id, String user, String email);
 
     }
 }

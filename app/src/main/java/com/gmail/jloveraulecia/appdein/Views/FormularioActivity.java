@@ -1,14 +1,20 @@
 package com.gmail.jloveraulecia.appdein.Views;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -16,14 +22,18 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.gmail.jloveraulecia.appdein.Interfaces.FormularioInterface;
 import com.gmail.jloveraulecia.appdein.Presenter.FormularioPresenter;
 import com.gmail.jloveraulecia.appdein.R;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Calendar;
 
 public class FormularioActivity extends AppCompatActivity implements FormularioInterface.View {
@@ -33,7 +43,7 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
     private Context myContext;
 
     private static final String FORM_ACTIVITY_TAG = FormularioActivity.class.getSimpleName();
-
+    ConstraintLayout layout;
     private String[] telefonos;
     private Button button;
     private Spinner mySpinner;
@@ -46,6 +56,11 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
     private void showLog(String text){
         Log.d(FORM_ACTIVITY_TAG, text);
     }
+
+    //cosas que deberian ir en el presentador para abrir la galeria
+    private static final int REQUEST_SELECT_IMAGE = 201;
+    final String pathFotos = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/demoAndroidImages/";
+    private Uri uri;
 
     /* Solucion de Rafa
     TextInputEditText nombreEditText = (TextInputEditText) findViewById(R.id.nombreDeLaVariable);
@@ -71,6 +86,7 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
         this.getSupportActionBar().setTitle("Formulario");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        layout=findViewById(R.id.Layout);
 
         presentador = new FormularioPresenter(this);
         myContext=this;
@@ -81,21 +97,6 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, opciones);
         mySpinner.setAdapter(adapter);
-
-        /*
-        mySpinner = (Spinner) findViewById(R.id.spinner);
-        mySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                switch(position){
-
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-            }
-        });*/
 
         button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -121,6 +122,7 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
                 }
             }
         });
+
         TextInputEditText emailEditText = (TextInputEditText) findViewById(R.id.editText);
         emailEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -138,6 +140,7 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
                 }
             }
         });
+
         TextInputEditText contEditText = (TextInputEditText) findViewById(R.id.editText3);
         contEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -184,8 +187,20 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
             @Override
             public void onClick(View v) {
                 presentador.onClickImage(myContext);
+                selectPicture();
             }
         });
+
+
+        //POR SI SE PASAN DATOS EN EL INTENT
+        try{
+            String user=getIntent().getStringExtra("user");
+            String email=getIntent().getStringExtra("email");
+            emailEditText.setText(email);
+            nombreEditText.setText(user);
+        }catch(Exception e){
+
+        }
 
     }
 
@@ -207,6 +222,16 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
         Intent ListIntent = new Intent(FormularioActivity.this, ListadoActivity.class);
         startActivity(ListIntent);
         finish();
+    }
+
+
+    @Override
+    public void setDatos(int id, String user, String email){
+        TextInputEditText emailEditText = findViewById(R.id.editText);
+        emailEditText.setText(email);
+
+        TextInputEditText nombreEditText = findViewById(R.id.editText2);
+        nombreEditText.setText(user);
     }
 
     @Override
@@ -285,13 +310,46 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        int resultado=0;
         switch (requestCode) {
             case CODE_READ_EXTERNAL_STORAGE_PERMISSION:
-                presentador.resultPermission(grantResults[0]);
+                resultado=presentador.resultPermission(grantResults[0]);
                 break;
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+        if(resultado==1){
+            showLog("AAAAAAAAAAAAAAAAAAAAAAAA");
+            Snackbar.make(layout, "Acceso a la galería denegado", Snackbar.LENGTH_SHORT)
+                    .show();
+        }
     }
 
+    @Override
+    public void launchGallery() {
+
+    }
+
+
+
+    private void selectPicture(){
+        // Se le pide al sistema una imagen del dispositivo
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(
+                Intent.createChooser(intent, getResources().getString(R.string.choose_picture)),
+                REQUEST_SELECT_IMAGE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Bitmap bmp=presentador.modifyImage(requestCode,resultCode,data, myContext);
+
+        // Se carga el Bitmap en el ImageView
+        ImageView imageView = findViewById(R.id.imageView);
+        if(bmp!=null) {
+            imageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, 80, 80, false));
+        }
+    }
 }

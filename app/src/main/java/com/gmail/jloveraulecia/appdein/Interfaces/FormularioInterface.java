@@ -2,6 +2,9 @@ package com.gmail.jloveraulecia.appdein.Interfaces;
 
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
 
@@ -11,11 +14,14 @@ public interface FormularioInterface {
         void lanzarError();
         void requestPermission();
         void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults);
+        void launchGallery();
+        void setDatos(int id, String user, String email);
     }
 
     public interface Presenter{
         void onFocusChange(View v, boolean hasFocus);
         void onClickImage(Context context);
-        void resultPermission(int resultado);
+        int resultPermission(int resultado);
+        Bitmap modifyImage(int requestCode, int resultCode, Intent data, Context myContext);
     }
 }
