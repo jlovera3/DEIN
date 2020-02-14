@@ -8,6 +8,8 @@ import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
 
+import com.gmail.jloveraulecia.appdein.Models.Person;
+
 public interface FormularioInterface {
 
     public interface View{
@@ -23,5 +25,6 @@ public interface FormularioInterface {
         void onClickImage(Context context);
         int resultPermission(int resultado);
         Bitmap modifyImage(int requestCode, int resultCode, Intent data, Context myContext);
+        void registrarPerson(Context context, Person person);
     }
 }

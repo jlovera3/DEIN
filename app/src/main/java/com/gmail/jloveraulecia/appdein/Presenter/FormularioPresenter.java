@@ -2,9 +2,11 @@ package com.gmail.jloveraulecia.appdein.Presenter;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -12,10 +14,12 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
 import com.gmail.jloveraulecia.appdein.Interfaces.FormularioInterface;
+import com.gmail.jloveraulecia.appdein.Models.Person;
 import com.gmail.jloveraulecia.appdein.R;
 import com.gmail.jloveraulecia.appdein.Views.FormularioActivity;
 import com.google.android.material.snackbar.Snackbar;
@@ -35,7 +39,37 @@ public class FormularioPresenter implements FormularioInterface.Presenter {
         this.view=view;
     }
 
+    @Override
+    public void registrarPerson(Context context, Person person){
 
+        SQlitePresenter conn= new SQlitePresenter(context, "db_person", null, 1);
+        SQLiteDatabase db=conn.getWritableDatabase();
+
+        ContentValues values=new ContentValues();
+
+        values.put("id", person.getId());
+        values.put("email", person.getEmail());
+        values.put("usuario", person.getUser());
+        //values.put("contraseña", person.());
+
+        Long idResultante=db.insert("usuarios", "id", values);
+
+        //Toast.makeText(this, "Id Registro: "+idResultante, Toast.LENGTH_SHORT).show();
+
+        db.close();
+    }
+
+    public void registrarPersonSQL(Context context, Person person){
+        SQlitePresenter conn= new SQlitePresenter(context, "db_person", null, 1);
+        SQLiteDatabase db=conn.getWritableDatabase();
+
+        String insert="INSERT INTO usuarios (id, email, usuario) VALUES" +
+                " ("+person.getId().toString()+","+person.getEmail()+","+person.getUser()+");";
+
+        db.execSQL(insert);
+
+        db.close();
+    }
 
     @Override
     public void onFocusChange(FormularioInterface.View v, boolean hasFocus) {

@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.gmail.jloveraulecia.appdein.Interfaces.FormularioInterface;
+import com.gmail.jloveraulecia.appdein.Models.Person;
 import com.gmail.jloveraulecia.appdein.Presenter.FormularioPresenter;
 import com.gmail.jloveraulecia.appdein.R;
 import com.google.android.material.snackbar.Snackbar;
@@ -93,7 +94,7 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
 
         //Spinner
         mySpinner = (Spinner)findViewById(R.id.spinner) ;
-        String [] opciones = {"Telefono 1", "Telefono 2","Telefono 3","..."};
+        String [] opciones = {"Telefono 1", "Telefono 2"};
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, opciones);
         mySpinner.setAdapter(adapter);
@@ -102,9 +103,19 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //primero vemos si los datos están validados
+                Person person=null;
+
+                //segundo llamamos a registrar usuario o a editarlo
+                presentador.registrarPersonSQL(myContext, person);
+
+                //Mostramos un Toast si se ha añadido correctamente
+
+                //tercero volvemos a la actividad listado PERO NO COMO VIENE ABAJO
                 restartListadoActivity();
             }
         });
+
         TextInputEditText nombreEditText = (TextInputEditText) findViewById(R.id.editText2);
         nombreEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
