@@ -45,13 +45,25 @@ public class Person {
     }
 
 
-    public void setTelef1(int telef1) {
-        this.telef1 = telef1;
+    public boolean setTelef1(int telef1) {
+        String tel=""+telef1;
+        if(tel.length()<9){
+            return false;
+        }else{
+            this.telef1 = telef1;
+            return true;
+        }
     }
 
 
-    public void setTelef2(int telef2) {
-        this.telef2 = telef2;
+    public boolean setTelef2(int telef2) {
+        String tel=""+telef2;
+        if(tel.length()<9){
+            return false;
+        }else{
+            this.telef2 = telef2;
+            return true;
+        }
     }
 
 
@@ -87,6 +99,7 @@ public class Person {
     public int getTelef2() {
         return telef2;
     }
+
     public String getImage() {
         return image;
     }

@@ -4,6 +4,7 @@ package com.gmail.jloveraulecia.appdein.Models;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.gmail.jloveraulecia.appdein.Presenter.SQlitePresenter;
 
@@ -25,15 +26,29 @@ public class PersonModel {
         if (c.moveToFirst()) {
             //Recorremos el cursor hasta que no haya más registros
             do {
+
+                Person p=new Person();
+
                 int id= c.getInt(0);
                 String nombre = c.getString(1);
                 String email = c.getString(2);
+                String pass=c.getString(3);
+                int telef1=c.getInt(4);
+                int telef2=c.getInt(5);
+                if(!c.getString(6).equals("")) {
+                    String image = c.getString(6);
+                    p.setImage(image);
+                }
 
-                Person p=new Person();
                 p.setId(id);
                 p.setUser(nombre);
                 p.setEmail(email);
+                p.setPassword(pass);
+                p.setTelef1(telef1);
+                p.setTelef2(telef2);
+
                 lista.add(p);
+
             } while(c.moveToNext());
         }
         db.close();

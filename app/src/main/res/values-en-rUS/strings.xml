@@ -26,4 +26,6 @@
     <string name="registro_de_usuario">User Registration</string>
     <string name="BuscarPorEmail">Search by Email</string>
     <string name="BuscarPorNombre">Search by Name</string>
+    <string name="actualizar">Actualizar</string>
+    <string name="eliminar">Eliminar</string>
 </resources>

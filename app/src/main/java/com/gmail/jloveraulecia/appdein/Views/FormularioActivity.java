@@ -11,9 +11,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -34,6 +36,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Calendar;
 
 public class FormularioActivity extends AppCompatActivity implements FormularioInterface.View {
@@ -41,6 +44,8 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
     public FormularioPresenter formPresentador;
     public static final int RESULT_GALLERY = 0;
     private Context myContext=this;
+    private Spinner mySpinner;
+    private ArrayAdapter<String> adapter;
 
     private static final String FORM_ACTIVITY_TAG = FormularioActivity.class.getSimpleName();
     ConstraintLayout layout;
@@ -50,6 +55,7 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
     private int mes;
     private int ano;
     private TextInputEditText nombreEditText, emailEditText, contEditText;
+    private EditText tel1EditText, tel2EditText;
 
     //cosas que deberian ir en el presentador para abrir la galeria
     private static final int REQUEST_SELECT_IMAGE = 201;
@@ -57,7 +63,7 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
     private Uri uri;
 
 
-    public boolean valido1, valido2, valido3;
+    public boolean valido1=true, valido2=true, valido3=true, valido4=true;
     public String nombre, emai, cont;
     public Person person=new Person();
 
@@ -74,13 +80,6 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
 
         SQlitePresenter conn= new SQlitePresenter(this, "db_person", null, 1);
 
-        //Spinner
-        Spinner mySpinner = (Spinner) findViewById(R.id.spinner);
-        String [] opciones = {"Telefono 1", "Telefono 2"};
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, opciones);
-        mySpinner.setAdapter(adapter);
-
         //MÉTODO PARA INICIAR LISTENERS DE LOS EDITTEXT
         iniciarValidaciones();
 
@@ -90,9 +89,18 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
             int id=getIntent().getIntExtra("id",0);
             String user=getIntent().getStringExtra("user");
             String email=getIntent().getStringExtra("email");
+            String password=getIntent().getStringExtra("password");
+            int telef1=getIntent().getIntExtra("telef1",0);
+            showLog(""+id);
+            int telef2=getIntent().getIntExtra("telef2",0);
             Log.d("PRUEBA", "nombre"+user+"email"+email);
-            emailEditText.setText(email);
-            nombreEditText.setText(user);
+            emailEditText.setText(user);
+            nombreEditText.setText(email);
+            contEditText.setText(password);
+            tel1EditText = (EditText) findViewById(R.id.editText4);
+            tel1EditText.setText(""+telef1);
+            mySpinner.setAdapter(adapter);
+
         }catch(Exception e){
 
         }
@@ -105,14 +113,28 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
             public void onClick(View v) {
                 //primero vemos si los datos están validados
                 Person person=new Person();
-                if(valido1 && valido2 && valido3){
-                    ImageView imageView = findViewById(R.id.imageView);
-                    person.setImage(imageView.toString());
+                if(valido1 && valido2 && valido3 ){
+                    ImageView iv1 = findViewById(R.id.imageView);
+
+                    iv1.buildDrawingCache();
+                    Bitmap bitmap = iv1.getDrawingCache();
+                    ByteArrayOutputStream stream=new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
+                    byte[] image=stream.toByteArray();
+                    String img_str = Base64.encodeToString(image, 0);
+
+                    person.setImage(img_str);
+                    person.setUser(nombreEditText.getText().toString());
+                    person.setEmail(emailEditText.getText().toString());
+                    person.setPassword(contEditText.getText().toString());
+                    /*try {
+                        person.setTelef1(Integer.parseInt(tel1EditText.getText().toString()));
+                    }catch (NullPointerException e){
+                        Log.d(FORM_ACTIVITY_TAG, e.toString());
+                    }*/
                     if(person.getId()==null) {
                         //segundo llamamos a registrar usuario o a editarlo
-                        formPresentador.registrarPerson(myContext, person);
-                    }else{
-                        formPresentador.actualizarPersonSQL(myContext, person);
+                        formPresentador.registrarPersonSQL(myContext, person);
                     }
 
                     //Mostramos un Toast si se ha añadido correctamente O HACEMOS UN METODO QUE SE LLAME DESDE PRESENTER
@@ -131,7 +153,17 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
 
     }
 
+
     private void iniciarValidaciones() {
+
+        //Spinner
+        mySpinner = (Spinner) findViewById(R.id.spinner);
+        String [] opciones = {"Telefono1","Telefono2"};
+
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, opciones);
+        mySpinner.setAdapter(adapter);
+
+
         nombreEditText = (TextInputEditText) findViewById(R.id.editText2);
         nombreEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -139,7 +171,7 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
                 TextInputLayout nombreInputLayout = (TextInputLayout) findViewById(R.id.textInputNombre);
                 if (!hasFocus) {
                     TextInputEditText et = (TextInputEditText) v;
-                    valido1=person.setUser(et.toString());
+                    valido1=person.setUser(et.getText().toString());
                     if(valido1==false) {
                         nombreInputLayout.setError("Nombre vacío");
                     } else {
@@ -183,6 +215,24 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
                 }
             }
         });
+        tel1EditText = (EditText) findViewById(R.id.editText4);
+        tel1EditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                TextInputLayout telefInputLayout = (TextInputLayout) findViewById(R.id.textInputTelef);
+                if (!hasFocus) {
+                    EditText et = (EditText) v;
+                    valido4=person.setPassword(et.getText().toString());
+                    if (valido4==false) {
+                        telefInputLayout.setError("Al menos 9 números");
+                    } else {
+                        telefInputLayout.setError("");
+                        valido4=true;
+                    }
+                }
+            }
+        });
+
 
 
 
@@ -392,7 +442,7 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
         // Se carga el Bitmap en el ImageView
         ImageView imageView = findViewById(R.id.imageView);
         if(bmp!=null) {
-            imageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, 80, 100, false));
+            imageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, 80, 80, false));
             person.setImage(bmp.toString());
         }
 

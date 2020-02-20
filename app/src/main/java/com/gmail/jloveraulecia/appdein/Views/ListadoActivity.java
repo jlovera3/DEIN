@@ -1,6 +1,7 @@
 package com.gmail.jloveraulecia.appdein.Views;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -104,6 +106,7 @@ public class ListadoActivity extends AppCompatActivity implements ListadoInterfa
                 presenter.onClickRecyclerView(personList.get(position).getId(),personList.get(position).getUser(),
                         personList.get(position).getEmail(), personList.get(position).getPassword(),personList.get(position).getTelef1(),
                         personList.get(position).getTelef2(), personList.get(position).getImage());
+                showLog(personList.get(position).getTelef1()+"");
             }
         });
 
@@ -158,7 +161,6 @@ public class ListadoActivity extends AppCompatActivity implements ListadoInterfa
     public void openFormularioActivity(){
         Intent formIntent = new Intent(ListadoActivity.this, FormularioActivity.class);
         startActivity(formIntent);
-        finish();
     }
 
     public void openBuscarActivity(){
@@ -211,6 +213,7 @@ public class ListadoActivity extends AppCompatActivity implements ListadoInterfa
 
         showLog("Activity restarted");
 
+
     }
 
     @Override
@@ -230,7 +233,7 @@ public class ListadoActivity extends AppCompatActivity implements ListadoInterfa
         super.onResume();//visible
 
         showLog("Activity resumed");
-
+        iniciarReciclerView();
     }
 
     @Override
@@ -319,9 +322,8 @@ public class ListadoActivity extends AppCompatActivity implements ListadoInterfa
         }
 
         @Override
-        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-            //Lo elimina de la base de datos
-            ArrayList<Person> people=presenter.getAllPerson(myContext);
+        public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, final int direction) {
+            final ArrayList<Person> people=presenter.getAllPerson(myContext);
             Log.d("hola", ""+direction);
             int position=0;
             for(int i=0; i<people.size();i++){
@@ -329,19 +331,40 @@ public class ListadoActivity extends AppCompatActivity implements ListadoInterfa
                     position=i;
                 }
             }
+            //primero mira la direccion y borra o actualiza en funcion de la direccion
             if(direction==8) {
-                presenter.removeOne(people.get(position), myContext);
+                final int finalPosition = position;
+                new AlertDialog.Builder(myContext)
+                    .setTitle("ELIMINAR USUARIO")
+                    .setMessage("¿Estás seguro que deseas eliminar este usuario?")
+
+                    // Specifying a listener allows you to take an action before dismissing the dialog.
+                    // The dialog is automatically dismissed when a dialog button is clicked.
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Continue with delete operation
+                            //Lo elimina de la base de datos
+
+                                presenter.removeOne(people.get(finalPosition), myContext);
+
+                            //Lo elimina del adaptador de personas en el recicledView
+                            personList.remove(viewHolder.getAdapterPosition());
+                            refrescarReciclerView(viewHolder.getAdapterPosition());
+                            Toast toast1 =
+                                    Toast.makeText(getApplicationContext(),
+                                            "Eliminado Correctamente", Toast.LENGTH_LONG);
+
+                            toast1.show();
+                        }
+                    })
+
+                    // A null listener allows the button to dismiss the dialog and take no further action.
+                    .setNegativeButton(android.R.string.no, null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
             }else if(direction==4){
                 presenter.updateOne(people.get(position), myContext);
             }
-            //Lo elimina del adaptador de personas en el recicledView
-            personList.remove(viewHolder.getAdapterPosition());
-            refrescarReciclerView(viewHolder.getAdapterPosition());
-            Toast toast1 =
-                    Toast.makeText(getApplicationContext(),
-                            "Eliminado Correctamente", Toast.LENGTH_LONG);
-
-            toast1.show();
         }
     };
 

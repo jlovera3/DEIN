@@ -30,4 +30,6 @@
     <string name="BuscarPorNombre">Buscar por Nombre</string>
     <string name="choose_picture" />
     <string name="Id_de_usuario">ID de Usuario</string>
+    <string name="actualizar">Actualizar</string>
+    <string name="eliminar">Eliminar</string>
 </resources>

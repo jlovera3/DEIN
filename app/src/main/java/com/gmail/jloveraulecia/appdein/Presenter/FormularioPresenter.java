@@ -47,10 +47,11 @@ public class FormularioPresenter implements FormularioInterface.Presenter {
 
         ContentValues values=new ContentValues();
 
-        values.put("id", 6);
         values.put("nombre", person.getUser());
         values.put("email", person.getEmail());
         values.put("password", person.getPassword());
+        values.put("telef1", person.getTelef1());
+        values.put("telef2",person.getTelef2());
         values.put("image", person.getImage());
 
         db.insert("Usuarios", null, values);
@@ -60,12 +61,13 @@ public class FormularioPresenter implements FormularioInterface.Presenter {
         db.close();
     }
 
+
     public void registrarPersonSQL(Context context, Person person){
         SQlitePresenter conn= new SQlitePresenter(context, "DBUsuarios", null, 1);
         SQLiteDatabase db=conn.getWritableDatabase();
 
-        String insert="INSERT INTO usuarios (email, usuario, image) VALUES" +
-                " ("+person.getEmail()+","+person.getUser()+","+person.getImage()+");";
+        String insert="INSERT INTO Usuarios (nombre, email, password, telef1, telef2, image) VALUES" +
+                " ('"+person.getUser()+"','"+person.getEmail()+"','"+person.getPassword()+"',"+person.getTelef1()+","+person.getTelef2()+",'"+person.getImage()+"');";
 
         db.execSQL(insert);
 
