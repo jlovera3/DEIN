@@ -7,8 +7,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -35,6 +37,7 @@ public class ListadoActivity extends AppCompatActivity implements ListadoInterfa
     private PersonAdapter adaptador;
     private ArrayList<Person> personList;
     private ListadoPresenter presenter;
+    private Context myContext;
 
     SQlitePresenter conn;
 
@@ -52,6 +55,14 @@ public class ListadoActivity extends AppCompatActivity implements ListadoInterfa
         this.getSupportActionBar().setTitle("Listado");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        myContext=this;
+
+        //PRIMERO CREAMOS LOS DATOS POR DEFECTO QUE TIENE NUESTRA APPLICACIÓN
+        presenter = new ListadoPresenter(this);
+        //presenter.insertarRegistrosPrueba(this);
+
+        //LLAMAMOS AL SELECT PARA LLENAR CON LOS REGISTROS EL RECICLEDVIEW
+        iniciarReciclerView();
 
 
         FloatingActionButton fab = findViewById(R.id.botonFlotante);
@@ -64,9 +75,6 @@ public class ListadoActivity extends AppCompatActivity implements ListadoInterfa
             }
         });
 
-        presenter = new ListadoPresenter(this);
-
-        iniciarReciclerView();
     }
 
 
@@ -75,7 +83,7 @@ public class ListadoActivity extends AppCompatActivity implements ListadoInterfa
         listadoRecyclerView = findViewById(R.id.recyclerView);
 
         // Crea el Adaptador con los datos de la lista anterior
-        personList = presenter.getAllPerson();
+        personList = presenter.getAllPerson(this);
         adaptador = new PersonAdapter(personList);
 
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(listadoRecyclerView);
@@ -91,11 +99,15 @@ public class ListadoActivity extends AppCompatActivity implements ListadoInterfa
                 // Accion al pulsar el elemento
                 int position = listadoRecyclerView.getChildAdapterPosition(v);
                 Log.d(LIST_ACTIVITY_TAG, "Click RV: " + personList.get(position).getId());
-                presenter.onClickRecyclerView(personList.get(position).getId(),personList.get(position).getUser(), personList.get(position).getEmail());
+                ArrayList<Person> people=presenter.getAllPerson(myContext);
+
+                presenter.onClickRecyclerView(personList.get(position).getId(),personList.get(position).getUser(),
+                        personList.get(position).getEmail(), personList.get(position).getPassword(),personList.get(position).getTelef1(),
+                        personList.get(position).getTelef2(), personList.get(position).getImage());
             }
         });
 
-        int a=presenter.ChangeNumberOfUsers();
+        int a=presenter.ChangeNumberOfUsers(this);
         TextView t=(TextView) findViewById(R.id.textView5);
         t.setText("Numero de Usuarios: "+a);
     }
@@ -105,10 +117,9 @@ public class ListadoActivity extends AppCompatActivity implements ListadoInterfa
         listadoRecyclerView = findViewById(R.id.recyclerView);
 
         // Crea el Adaptador con los datos de la lista anterior
-        personList = presenter.getAllPersonMenos(posicion);
         adaptador = new PersonAdapter(personList);
-
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(listadoRecyclerView);
+
         // Asocia el Adaptador al RecyclerView
         listadoRecyclerView.setAdapter(adaptador);
 
@@ -121,11 +132,13 @@ public class ListadoActivity extends AppCompatActivity implements ListadoInterfa
                 // Accion al pulsar el elemento
                 int position = listadoRecyclerView.getChildAdapterPosition(v);
                 Log.d(LIST_ACTIVITY_TAG, "Click RV: " + personList.get(position).getId());
-                presenter.onClickRecyclerView(personList.get(position).getId(),personList.get(position).getUser(), personList.get(position).getEmail());
+                presenter.onClickRecyclerView(personList.get(position).getId(),personList.get(position).getUser(),
+                        personList.get(position).getEmail(), personList.get(position).getPassword(),personList.get(position).getTelef1(),
+                        personList.get(position).getTelef2(), personList.get(position).getImage());
             }
         });
 
-        int a=presenter.ChangeNumberOfUsers2();
+        int a=presenter.ChangeNumberOfUsers(this);
         TextView t=(TextView) findViewById(R.id.textView5);
         t.setText("Numero de Usuarios: "+a);
     }
@@ -261,12 +274,13 @@ public class ListadoActivity extends AppCompatActivity implements ListadoInterfa
 
     }
 
+
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
     @Override
-    public void lanzarFormularioBecauseRV(int id, String email, String user) {
+    public void lanzarFormularioBecauseRV(int id, String email, String user, String password, int telef1, int telef2, String u) {
         Log.d(LIST_ACTIVITY_TAG, "Lanzando formulario desde RV...");
 
         if(id == -1) {
@@ -275,6 +289,10 @@ public class ListadoActivity extends AppCompatActivity implements ListadoInterfa
             intent.putExtra("id", id);
             intent.putExtra("email", email);
             intent.putExtra("user", user);
+            intent.putExtra("password", password);
+            intent.putExtra("telef1",telef1);
+            intent.putExtra("telef2",telef2);
+            intent.putExtra("image", u);
             startActivity(intent);
         }
         else {
@@ -282,6 +300,10 @@ public class ListadoActivity extends AppCompatActivity implements ListadoInterfa
             intent.putExtra("id", id);
             intent.putExtra("email", email);
             intent.putExtra("user", user);
+            intent.putExtra("password", password);
+            intent.putExtra("telef1",telef1);
+            intent.putExtra("telef2",telef2);
+            intent.putExtra("image", u);
             //bundle
             //TODO bundle para encapsular el id y pasarselo al activity
             //TODO es un paquete en el que metemos variables cadena->valor cadena->valor
@@ -298,6 +320,21 @@ public class ListadoActivity extends AppCompatActivity implements ListadoInterfa
 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            //Lo elimina de la base de datos
+            ArrayList<Person> people=presenter.getAllPerson(myContext);
+            Log.d("hola", ""+direction);
+            int position=0;
+            for(int i=0; i<people.size();i++){
+                if(i==viewHolder.getAdapterPosition()){
+                    position=i;
+                }
+            }
+            if(direction==8) {
+                presenter.removeOne(people.get(position), myContext);
+            }else if(direction==4){
+                presenter.updateOne(people.get(position), myContext);
+            }
+            //Lo elimina del adaptador de personas en el recicledView
             personList.remove(viewHolder.getAdapterPosition());
             refrescarReciclerView(viewHolder.getAdapterPosition());
             Toast toast1 =

@@ -42,33 +42,40 @@ public class FormularioPresenter implements FormularioInterface.Presenter {
     @Override
     public void registrarPerson(Context context, Person person){
 
-        SQlitePresenter conn= new SQlitePresenter(context, "db_person", null, 1);
+        SQlitePresenter conn= new SQlitePresenter(context, "DBUsuarios", null, 1);
         SQLiteDatabase db=conn.getWritableDatabase();
 
         ContentValues values=new ContentValues();
 
-        values.put("id", person.getId());
+        values.put("id", 6);
+        values.put("nombre", person.getUser());
         values.put("email", person.getEmail());
-        values.put("usuario", person.getUser());
-        //values.put("contraseña", person.());
+        values.put("password", person.getPassword());
+        values.put("image", person.getImage());
 
-        Long idResultante=db.insert("usuarios", "id", values);
+        db.insert("Usuarios", null, values);
 
-        //Toast.makeText(this, "Id Registro: "+idResultante, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Insertado correctamente", Toast.LENGTH_SHORT).show();
 
         db.close();
     }
 
     public void registrarPersonSQL(Context context, Person person){
-        SQlitePresenter conn= new SQlitePresenter(context, "db_person", null, 1);
+        SQlitePresenter conn= new SQlitePresenter(context, "DBUsuarios", null, 1);
         SQLiteDatabase db=conn.getWritableDatabase();
 
-        String insert="INSERT INTO usuarios (id, email, usuario) VALUES" +
-                " ("+person.getId().toString()+","+person.getEmail()+","+person.getUser()+");";
+        String insert="INSERT INTO usuarios (email, usuario, image) VALUES" +
+                " ("+person.getEmail()+","+person.getUser()+","+person.getImage()+");";
 
         db.execSQL(insert);
 
         db.close();
+    }
+
+    public void actualizarPersonSQL(Context context, Person person){
+        //AQUI VA EL METODO UPDATE!!!!
+
+
     }
 
     @Override

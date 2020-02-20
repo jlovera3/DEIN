@@ -1,5 +1,6 @@
 package com.gmail.jloveraulecia.appdein.Presenter;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.EditText;
 
@@ -9,7 +10,6 @@ import com.gmail.jloveraulecia.appdein.R;
 
 public class BuscarPresenter extends AppCompatActivity {
 
-    EditText campoId, campoEmail, campoUser;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -17,4 +17,7 @@ public class BuscarPresenter extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buscar);
     }
+
+
+
 }

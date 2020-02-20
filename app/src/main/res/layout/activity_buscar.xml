@@ -75,8 +75,8 @@
 
             <LinearLayout
                 android:id="@+id/fechaLayout"
-                android:layout_width="408dp"
-                android:layout_height="57dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
                 android:orientation="horizontal"
@@ -86,23 +86,15 @@
                 app:layout_constraintTop_toBottomOf="@+id/editText4">
 
                 <EditText
-                    android:id="@+id/editTextFecha"
-                    android:layout_width="368dp"
+                    android:id="@+id/editTextId"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:drawableStart="@drawable/ic_action_date"
                     android:ems="10"
                     android:gravity="center"
-                    android:hint="@string/FechaNacimiento"
+                    android:hint="@string/Id_de_usuario"
                     android:inputType="date" />
-
-                <ImageButton
-                    android:id="@+id/fechaButtom"
-                    android:layout_width="44dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/imagen_para_abrir_calendario"
-                    app:srcCompat="@android:drawable/ic_menu_my_calendar" />
 
             </LinearLayout>
 
@@ -110,7 +102,7 @@
                 android:id="@+id/button5"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Button" />
+                android:text="Buscar" />
 
 
         </LinearLayout>

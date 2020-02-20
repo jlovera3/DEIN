@@ -1,14 +1,13 @@
 package com.gmail.jloveraulecia.appdein.Presenter;
 
 
-import android.widget.TextView;
-
-import com.gmail.jloveraulecia.appdein.Interfaces.FormularioInterface;
+import android.content.Context;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import com.gmail.jloveraulecia.appdein.Interfaces.ListadoInterface;
 import com.gmail.jloveraulecia.appdein.Models.PersonModel;
 import com.gmail.jloveraulecia.appdein.Models.Person;
-import com.gmail.jloveraulecia.appdein.Views.FormularioActivity;
-import com.gmail.jloveraulecia.appdein.Views.ListadoActivity;
 
 import java.util.ArrayList;
 
@@ -22,8 +21,8 @@ public class ListadoPresenter implements ListadoInterface.Presenter{
     }
 
     @Override
-    public void onClickRecyclerView(int id , String user, String email) {
-        view.lanzarFormularioBecauseRV(id, user, email);
+    public void onClickRecyclerView(int id , String user, String email, String password, int telef1, int telef2, String image) {
+        view.lanzarFormularioBecauseRV(id, user, email, password, telef1, telef2, image);
     }
 
 
@@ -34,15 +33,11 @@ public class ListadoPresenter implements ListadoInterface.Presenter{
 
     //HAY QUE IMPLEMENTAR UN METODO QUE MUESTRE UN TOAST AL ELIMINAR UN ELEMENTO
 
-    public ArrayList<Person> getAllPerson(){
-        ChangeNumberOfUsers();
-        return person.getAllPerson();
+    public ArrayList<Person> getAllPerson(Context context){
+        ChangeNumberOfUsers(context);
+        return person.getAllPerson(context);
     }
 
-    public ArrayList<Person> getAllPersonMenos(int posicion){
-        ChangeNumberOfUsers2();
-        return person.getAllPersonMenos(posicion);
-    }
 
 
     @Override
@@ -51,11 +46,42 @@ public class ListadoPresenter implements ListadoInterface.Presenter{
     }
 
     @Override
-    public int ChangeNumberOfUsers() {
-        return person.getAllPerson().size();
-    }
-    public int ChangeNumberOfUsers2() {
-        return person.getAllPerson().size()-1;
+    public int ChangeNumberOfUsers(Context context) {
+        return person.getAllPerson(context).size();
     }
 
+    public void insertarRegistrosPrueba(Context context) {
+        SQlitePresenter conexion= new SQlitePresenter(context, "DBUsuarios", null, 1);
+        SQLiteDatabase db =conexion.getWritableDatabase();
+
+        if(db != null){
+            for(int i=1;i<6; i++) {
+                String nombre = "UsuarioPrueba" + i;
+                String mail = "gmail.com";
+                String password="1234567";
+                String image="";
+
+                db.execSQL("INSERT INTO Usuarios (nombre, email, password, telef1, telef2, image) " +
+                        "VALUES ('" + nombre + "', '"+nombre+"@"+ mail + "','" + password + "',900222333 ,800444555, '" + image + "')");
+            }
+        }
+        db.close();
+    }
+
+    public void removeOne(Person person, Context context) {
+        SQlitePresenter conexion= new SQlitePresenter(context, "DBUsuarios", null, 1);
+        SQLiteDatabase db =conexion.getWritableDatabase();
+
+        try {
+            db.delete("Usuarios", "id=" + person.getId(), null);
+            Log.d("Listado Presenter", "Eliminado correctamente a "+person.toString());
+        }catch (SQLException e){
+            Log.d("Listado_Presenter", "No se ha podido eliminar");
+        }
+        db.close();
+    }
+
+    public void updateOne(Person person, Context myContext) {
+
+    }
 }

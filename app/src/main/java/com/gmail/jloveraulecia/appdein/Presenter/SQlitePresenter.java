@@ -7,27 +7,28 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 public class SQlitePresenter extends SQLiteOpenHelper {
-    private static final String NOMBRE_DB="appdein.db";
-    private static final int VERSION_DB=1;
-    final String SENTENCIA_CREAR="CREATE TABLE person (id INTEGER, user TEXT, email TEXT, image BLOB)";
+
+    //Sentencia SQL para crear la tabla de Usuarios
+    String sqlCreate = "CREATE TABLE Usuarios(id INTEGER PRIMARY KEY, nombre TEXT, email TEXT, password TEXT, telef1 INTEGER, telef2 INTEGER, image TEXT)";
 
     public SQlitePresenter(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, NOMBRE_DB, null, VERSION_DB);
+        super(context, name, factory, version);
     }
 
 
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SENTENCIA_CREAR);
+        db.execSQL(sqlCreate);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS person");
+        //Se elimina la versión anterior de la tabla
+        db.execSQL("DROP TABLE IF EXISTS Usuarios");
+
+        //Se crea la nueva versión de la tabla
         onCreate(db);
     }
 
-    public void agregarUsuarios(){
-    }
 }

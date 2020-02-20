@@ -29,4 +29,5 @@
     <string name="BuscarPorEmail">Buscar por Email</string>
     <string name="BuscarPorNombre">Buscar por Nombre</string>
     <string name="choose_picture" />
+    <string name="Id_de_usuario">ID de Usuario</string>
 </resources>
