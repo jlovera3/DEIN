@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -38,6 +39,14 @@ public class BuscarActivity extends AppCompatActivity {
         campoId= (EditText) findViewById(R.id.editTextId);
         campoEmail= (EditText) findViewById(R.id.editTextEmail);
         campoUser= (EditText) findViewById(R.id.editTextNombre);
+
+        Button button= (Button) findViewById(R.id.button5);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
 
     }

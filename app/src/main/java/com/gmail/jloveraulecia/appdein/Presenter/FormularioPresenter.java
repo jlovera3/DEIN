@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -62,7 +63,7 @@ public class FormularioPresenter implements FormularioInterface.Presenter {
     }
 
 
-    public void registrarPersonSQL(Context context, Person person){
+    /*public void registrarPersonSQL(Context context, Person person){
         SQlitePresenter conn= new SQlitePresenter(context, "DBUsuarios", null, 1);
         SQLiteDatabase db=conn.getWritableDatabase();
 
@@ -72,13 +73,31 @@ public class FormularioPresenter implements FormularioInterface.Presenter {
         db.execSQL(insert);
 
         db.close();
+    }*/
+
+    public void actualizarPersonSQL(Person person, Context myContext) {
+        SQlitePresenter conexion= new SQlitePresenter(myContext, "DBUsuarios", null, 1);
+        SQLiteDatabase db =conexion.getWritableDatabase();
+
+        try {
+            //Establecemos los campos-valores a actualizar
+            ContentValues valores = new ContentValues();
+            valores.put("nombre",person.getUser());
+            valores.put("email", person.getEmail());
+            valores.put("password", person.getPassword());
+            valores.put("telef1", person.getTelef1());
+            valores.put("image", person.getImage());
+
+            //Actualizamos el registro en la base de datos
+            db.update("Usuarios", valores, "id="+person.getId(), null);
+            Log.d("Listado Presenter", "Actualizado correctamente a "+person.toString());
+        }catch (SQLException e){
+            Log.d("Listado_Presenter", "No se ha podido eliminar");
+        }
+        db.close();
     }
 
-    public void actualizarPersonSQL(Context context, Person person){
-        //AQUI VA EL METODO UPDATE!!!!
 
-
-    }
 
     @Override
     public void onFocusChange(FormularioInterface.View v, boolean hasFocus) {
@@ -138,5 +157,19 @@ public class FormularioPresenter implements FormularioInterface.Presenter {
         }
         return bmp;
     }
+
+    public void deletePersonSQL(Person person, Context myContext) {
+        SQlitePresenter conexion= new SQlitePresenter(myContext, "DBUsuarios", null, 1);
+        SQLiteDatabase db =conexion.getWritableDatabase();
+
+        try {
+            db.delete("Usuarios", "id=" + person.getId(), null);
+            Log.d("Listado Presenter", "Eliminado correctamente a "+person.toString());
+        }catch (SQLException e){
+            Log.d("Listado_Presenter", "No se ha podido eliminar");
+        }
+        db.close();
+    }
+
 
 }

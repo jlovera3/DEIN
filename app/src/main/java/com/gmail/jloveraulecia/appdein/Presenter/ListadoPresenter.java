@@ -82,25 +82,4 @@ public class ListadoPresenter implements ListadoInterface.Presenter{
         db.close();
     }
 
-    public void updateOne(Person person, Context myContext) {
-        SQlitePresenter conexion= new SQlitePresenter(myContext, "DBUsuarios", null, 1);
-        SQLiteDatabase db =conexion.getWritableDatabase();
-
-        try {
-            //Establecemos los campos-valores a actualizar
-            ContentValues valores = new ContentValues();
-            valores.put("nombre",person.getUser());
-            valores.put("email", person.getEmail());
-            valores.put("password", person.getPassword());
-            valores.put("telef1", person.getTelef1());
-            valores.put("image", person.getImage());
-
-            //Actualizamos el registro en la base de datos
-            db.update("Usuarios", valores, "id="+person.getId(), null);
-            Log.d("Listado Presenter", "Actualizado correctamente a "+person.toString());
-        }catch (SQLException e){
-            Log.d("Listado_Presenter", "No se ha podido eliminar");
-        }
-        db.close();
-    }
 }

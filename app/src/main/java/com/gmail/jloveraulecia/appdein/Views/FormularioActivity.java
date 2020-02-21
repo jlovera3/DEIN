@@ -1,16 +1,20 @@
 package com.gmail.jloveraulecia.appdein.Views;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,7 +33,9 @@ import android.widget.Toast;
 
 import com.gmail.jloveraulecia.appdein.Interfaces.FormularioInterface;
 import com.gmail.jloveraulecia.appdein.Models.Person;
+import com.gmail.jloveraulecia.appdein.Models.PersonModel;
 import com.gmail.jloveraulecia.appdein.Presenter.FormularioPresenter;
+import com.gmail.jloveraulecia.appdein.Presenter.ListadoPresenter;
 import com.gmail.jloveraulecia.appdein.Presenter.SQlitePresenter;
 import com.gmail.jloveraulecia.appdein.R;
 import com.google.android.material.snackbar.Snackbar;
@@ -37,7 +43,9 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class FormularioActivity extends AppCompatActivity implements FormularioInterface.View {
     final private int CODE_READ_EXTERNAL_STORAGE_PERMISSION=123;
@@ -56,6 +64,7 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
     private int ano;
     private TextInputEditText nombreEditText, emailEditText, contEditText;
     private EditText tel1EditText, tel2EditText;
+    private ImageButton bImagen;
 
     //cosas que deberian ir en el presentador para abrir la galeria
     private static final int REQUEST_SELECT_IMAGE = 201;
@@ -80,20 +89,20 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
 
         SQlitePresenter conn= new SQlitePresenter(this, "db_person", null, 1);
 
-        //MÉTODO PARA INICIAR LISTENERS DE LOS EDITTEXT
+        //MÉTODO PARA INICIAR LISTENERS DE LOS EDITTEXT Y SUS VALIDACIONES
         iniciarValidaciones();
 
+        //MÉTODO PARA INICIAR LISTENER DE BOTONES GUARDAR/ACTUALIZAR/ELIMINAR
+        iniciarListenerBotones();
 
-        //POR SI SE PASAN DATOS EN EL INTENT
+        //POR SI SE PASAN DATOS EN EL INTENT, SE RECIBEN ASI:
         try{
             int id=getIntent().getIntExtra("id",0);
             String user=getIntent().getStringExtra("user");
             String email=getIntent().getStringExtra("email");
             String password=getIntent().getStringExtra("password");
             int telef1=getIntent().getIntExtra("telef1",0);
-            showLog(""+id);
             int telef2=getIntent().getIntExtra("telef2",0);
-            Log.d("PRUEBA", "nombre"+user+"email"+email);
             emailEditText.setText(user);
             nombreEditText.setText(email);
             contEditText.setText(password);
@@ -101,9 +110,22 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
             tel1EditText.setText(""+telef1);
             mySpinner.setAdapter(adapter);
 
+            String image=getIntent().getStringExtra("image");
+            byte[] decodedString = Base64.decode(image, Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            ImageView iv1 = findViewById(R.id.imageView);
+            iv1.setImageBitmap(decodedByte);
+
         }catch(Exception e){
 
         }
+
+
+
+
+    }
+
+    private void iniciarListenerBotones() {
 
         //METODO PARA BOTÓN GUARDAR USUARIO
 
@@ -134,12 +156,12 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
                     }*/
                     if(person.getId()==null) {
                         //segundo llamamos a registrar usuario o a editarlo
-                        formPresentador.registrarPersonSQL(myContext, person);
+                        formPresentador.registrarPerson(myContext, person);
                     }
 
                     //Mostramos un Toast si se ha añadido correctamente O HACEMOS UN METODO QUE SE LLAME DESDE PRESENTER
-
-                    //tercero volvemos a la actividad listado PERO NO Con restartListadoActivity();
+                    Toast.makeText(myContext, "Introducido correctamente", Toast.LENGTH_SHORT).show();
+                    //tercero volvemos a la actividad listado
                     restartListadoActivity();
 
                 }else{
@@ -147,10 +169,123 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
                     Log.d("Validacion?"," "+valido1+", "+valido2+", "+valido3);
                     Toast.makeText(myContext, "Los datos no son válidos", Toast.LENGTH_SHORT).show();
                 }
-                //registrar(layout.getViewById(R.layout.activity_formulario));
             }
         });
 
+        //LISTENER Y LLAMADA AL METODO UPDATE SI SE PULSA ACTULIZAR
+        Button button2 = (Button) findViewById(R.id.button2);
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getIntent().getIntExtra("id", 0) != 0) {
+                    Person person = new Person();
+                    int id = getIntent().getIntExtra("id", 0);
+                    PersonModel personModel = new PersonModel();
+                    ArrayList<Person> people = personModel.getAllPerson(myContext);
+                    for (int i = 0; i < people.size(); i++) {
+                        if (id == people.get(i).getId()) {
+                            person = people.get(i);
+                        }
+                    }
+
+                    //vemos si los datos están validados
+                    if (valido1 && valido2 && valido3) {
+                        ImageView iv1 = findViewById(R.id.imageView);
+
+                        iv1.buildDrawingCache();
+                        Bitmap bitmap = iv1.getDrawingCache();
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
+                        byte[] image = stream.toByteArray();
+                        String img_str = Base64.encodeToString(image, 0);
+
+                        person.setImage(img_str);
+                        person.setUser(nombreEditText.getText().toString());
+                        person.setEmail(emailEditText.getText().toString());
+                        person.setPassword(contEditText.getText().toString());
+
+                        try {
+                            person.setTelef1(Integer.parseInt(tel1EditText.getText().toString()));
+                        }catch (NullPointerException e){
+                            Log.d(FORM_ACTIVITY_TAG, e.toString());
+                        }
+
+                        formPresentador.actualizarPersonSQL(person, myContext);
+
+                        //Mostramos un Toast si se ha añadido correctamente O HACEMOS UN METODO QUE SE LLAME DESDE PRESENTER
+                        Toast.makeText(myContext, "Actualizado correctamente", Toast.LENGTH_SHORT).show();
+                        //tercero volvemos a la actividad listado
+                        restartListadoActivity();
+
+                    } else {
+                        //MOSTRAT UN TOAST QUE DIGA QUE LOS DATOS SON INCORRECTOS
+                        Log.d("Validacion?", " " + valido1 + ", " + valido2 + ", " + valido3);
+                        Toast.makeText(myContext, "Los datos no son válidos", Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    Toast.makeText(myContext, "No puedes actualizar un registro nuevo", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+        //LISTENER Y LLAMADA AL METODO DELETE SI SE PULSA ELIMINAR
+        Button button3 = (Button) findViewById(R.id.button3);
+        button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getIntent().getIntExtra("id", 0) != 0) {
+                    Person person = new Person();
+                    int id = getIntent().getIntExtra("id", 0);
+                    PersonModel personModel = new PersonModel();
+                    ArrayList<Person> people = personModel.getAllPerson(myContext);
+                    for (int i = 0; i < people.size(); i++) {
+                        if (id == people.get(i).getId()) {
+                            person = people.get(i);
+                        }
+                    }
+
+                    try {
+                        final Person finalPerson = person;
+                        new AlertDialog.Builder(myContext)
+                            .setTitle("ELIMINAR USUARIO")
+                            .setMessage("¿Estás seguro que deseas eliminar este usuario?")
+
+                            // Specifying a listener allows you to take an action before dismissing the dialog.
+                            // The dialog is automatically dismissed when a dialog button is clicked.
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Continue with delete operation
+                                    //Lo elimina de la base de datos
+
+                                    formPresentador.deletePersonSQL(finalPerson, myContext);
+                                    Toast.makeText(myContext, "Elimniado correctamente", Toast.LENGTH_SHORT).show();
+                                    //volvemos a la actividad listado
+                                    restartListadoActivity();
+                                }
+                            })
+
+                            // A null listener allows the button to dismiss the dialog and take no further action.
+                            .setNegativeButton(android.R.string.no, null)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                    }catch (NullPointerException e){
+                        Log.d(FORM_ACTIVITY_TAG, e.toString());
+                    }
+
+
+                }else{
+                    setFieldsToEmpty();
+                }
+            }
+        });
+    }
+
+    private void setFieldsToEmpty() {
+        emailEditText.setText("");
+        nombreEditText.setText("");
+        contEditText.setText("");
+        tel1EditText.setText("");
     }
 
 
@@ -172,7 +307,7 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
                 if (!hasFocus) {
                     TextInputEditText et = (TextInputEditText) v;
                     valido1=person.setUser(et.getText().toString());
-                    if(valido1==false) {
+                    if(!valido1) {
                         nombreInputLayout.setError("Nombre vacío");
                     } else {
                         nombreInputLayout.setError("");
@@ -189,7 +324,7 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
                 if (!hasFocus) {
                     TextInputEditText et = (TextInputEditText) v;
                     valido2=person.setEmail(et.getText().toString());
-                    if (valido2==false) {
+                    if (!valido2) {
                         mailInputLayout.setError("Email tiene que tener @");
                     } else {
                         mailInputLayout.setError("");
@@ -206,7 +341,7 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
                 if (!hasFocus) {
                     TextInputEditText et = (TextInputEditText) v;
                     valido3=person.setPassword(et.getText().toString());
-                    if (valido3==false) {
+                    if (!valido3) {
                         contInputLayout.setError("Al menos 6 caracteres");
                     } else {
                         contInputLayout.setError("");
@@ -223,7 +358,7 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
                 if (!hasFocus) {
                     EditText et = (EditText) v;
                     valido4=person.setPassword(et.getText().toString());
-                    if (valido4==false) {
+                    if (!valido4) {
                         telefInputLayout.setError("Al menos 9 números");
                     } else {
                         telefInputLayout.setError("");
@@ -247,6 +382,7 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
                 ano = 1900;
 
                 DatePickerDialog datePickerDialog = new DatePickerDialog(FormularioActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @SuppressLint("SetTextI18n")
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         textFecha.setText(dayOfMonth+"/"+(month+1)+"/"+year);
@@ -258,7 +394,7 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
 
 
         //Boton de acceso a la galería. Llama al presentador para que acceda a los permisos.
-        ImageButton bImagen = findViewById(R.id.imageButton);
+        bImagen = findViewById(R.id.imageButton);
         bImagen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -268,32 +404,6 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
         });
 
 
-    }
-
-    public void registrar(View view){
-        SQlitePresenter admin= new SQlitePresenter(this, "db_person", null, 1);
-        SQLiteDatabase db= admin.getWritableDatabase();
-
-        nombre = nombreEditText.getText().toString();
-        emai = emailEditText.getText().toString();
-        cont = contEditText.getText().toString();
-
-        if(valido1 && valido2 && valido3){
-            ContentValues registro= new ContentValues();
-            registro.put("usuario", nombre);
-            registro.put("email", emai);
-            registro.put("password", cont);
-            db.insert("usuarios", null, registro);
-
-            db.close();
-
-            nombreEditText.setText("");
-            emailEditText.setText("");
-            contEditText.setText("");
-            Toast.makeText(myContext, "Registro exitoso", Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(myContext, "Los datos no son válidos", Toast.LENGTH_SHORT).show();
-        }
     }
 
 

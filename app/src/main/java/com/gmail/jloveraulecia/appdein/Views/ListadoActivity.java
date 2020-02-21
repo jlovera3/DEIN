@@ -101,7 +101,6 @@ public class ListadoActivity extends AppCompatActivity implements ListadoInterfa
                 // Accion al pulsar el elemento
                 int position = listadoRecyclerView.getChildAdapterPosition(v);
                 Log.d(LIST_ACTIVITY_TAG, "Click RV: " + personList.get(position).getId());
-                ArrayList<Person> people=presenter.getAllPerson(myContext);
 
                 presenter.onClickRecyclerView(personList.get(position).getId(),personList.get(position).getUser(),
                         personList.get(position).getEmail(), personList.get(position).getPassword(),personList.get(position).getTelef1(),
@@ -331,8 +330,7 @@ public class ListadoActivity extends AppCompatActivity implements ListadoInterfa
                     position=i;
                 }
             }
-            //primero mira la direccion y borra o actualiza en funcion de la direccion
-            if(direction==8) {
+
                 final int finalPosition = position;
                 new AlertDialog.Builder(myContext)
                     .setTitle("ELIMINAR USUARIO")
@@ -362,9 +360,7 @@ public class ListadoActivity extends AppCompatActivity implements ListadoInterfa
                     .setNegativeButton(android.R.string.no, null)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
-            }else if(direction==4){
-                presenter.updateOne(people.get(position), myContext);
-            }
+
         }
     };
 
