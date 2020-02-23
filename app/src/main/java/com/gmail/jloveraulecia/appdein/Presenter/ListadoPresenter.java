@@ -1,7 +1,6 @@
 package com.gmail.jloveraulecia.appdein.Presenter;
 
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -22,8 +21,8 @@ public class ListadoPresenter implements ListadoInterface.Presenter{
     }
 
     @Override
-    public void onClickRecyclerView(int id , String user, String email, String password, int telef1, int telef2, String image) {
-        view.lanzarFormularioBecauseRV(id, user, email, password, telef1, telef2, image);
+    public void onClickRecyclerView(int id , String user, String email, String password, int telef1, int telef2, String image, String fecha) {
+        view.lanzarFormularioBecauseRV(id, user, email, password, telef1, telef2, image, fecha);
     }
 
 

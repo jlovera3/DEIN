@@ -137,7 +137,7 @@ public class ListadoActivity extends AppCompatActivity implements ListadoInterfa
 
                 presenter.onClickRecyclerView(personList.get(position).getId(),personList.get(position).getUser(),
                         personList.get(position).getEmail(), personList.get(position).getPassword(),personList.get(position).getTelef1(),
-                        personList.get(position).getTelef2(), personList.get(position).getImage());
+                        personList.get(position).getTelef2(), personList.get(position).getImage(), personList.get(position).getFecha());
                 showLog(personList.get(position).getTelef1()+"");
             }
         });
@@ -169,7 +169,7 @@ public class ListadoActivity extends AppCompatActivity implements ListadoInterfa
                 Log.d(LIST_ACTIVITY_TAG, "Click RV: " + personList.get(position).getId());
                 presenter.onClickRecyclerView(personList.get(position).getId(),personList.get(position).getUser(),
                         personList.get(position).getEmail(), personList.get(position).getPassword(),personList.get(position).getTelef1(),
-                        personList.get(position).getTelef2(), personList.get(position).getImage());
+                        personList.get(position).getTelef2(), personList.get(position).getImage(), personList.get(position).getFecha());
             }
         });
 
@@ -324,7 +324,7 @@ public class ListadoActivity extends AppCompatActivity implements ListadoInterfa
 
     }
     @Override
-    public void lanzarFormularioBecauseRV(int id, String email, String user, String password, int telef1, int telef2, String u) {
+    public void lanzarFormularioBecauseRV(int id, String email, String user, String password, int telef1, int telef2, String u, String fecha) {
         Log.d(LIST_ACTIVITY_TAG, "Lanzando formulario desde RV...");
 
         if(id == -1) {
@@ -337,6 +337,7 @@ public class ListadoActivity extends AppCompatActivity implements ListadoInterfa
             intent.putExtra("telef1",telef1);
             intent.putExtra("telef2",telef2);
             intent.putExtra("image", u);
+            intent.putExtra("fecha", fecha);
             startActivity(intent);
         }
         else {
@@ -348,6 +349,7 @@ public class ListadoActivity extends AppCompatActivity implements ListadoInterfa
             intent.putExtra("telef1",telef1);
             intent.putExtra("telef2",telef2);
             intent.putExtra("image", u);
+            intent.putExtra("fecha", fecha);
             //bundle
             //TODO bundle para encapsular el id y pasarselo al activity
             //TODO es un paquete en el que metemos variables cadena->valor cadena->valor

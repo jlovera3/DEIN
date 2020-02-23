@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class SQlitePresenter extends SQLiteOpenHelper {
 
     //Sentencia SQL para crear la tabla de Usuarios
-    String sqlCreate = "CREATE TABLE Usuarios(id INTEGER PRIMARY KEY, nombre TEXT, email TEXT, password TEXT, telef1 INTEGER, telef2 INTEGER, image BLOB)";
+    String sqlCreate = "CREATE TABLE Usuarios(id INTEGER PRIMARY KEY, nombre TEXT, email TEXT, password TEXT, telef1 INTEGER, telef2 INTEGER, image BLOB, fecha TEXT)";
 
     public SQlitePresenter(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -61,6 +61,7 @@ public class SQlitePresenter extends SQLiteOpenHelper {
                     String image = c.getString(6);
                     p.setImage(image);
                 }
+                String fecha=c.getString(7);
 
                 p.setId(id1);
                 p.setUser(nombre);
@@ -68,7 +69,7 @@ public class SQlitePresenter extends SQLiteOpenHelper {
                 p.setPassword(pass);
                 p.setTelef1(telef1);
                 p.setTelef2(telef2);
-
+                p.setFecha(fecha);
                 lista.add(p);
 
             } while(c.moveToNext());
@@ -102,6 +103,7 @@ public class SQlitePresenter extends SQLiteOpenHelper {
                     String image = c.getString(6);
                     p.setImage(image);
                 }
+                String fecha=c.getString(7);
 
                 p.setId(id1);
                 p.setUser(nombre1);
@@ -109,7 +111,7 @@ public class SQlitePresenter extends SQLiteOpenHelper {
                 p.setPassword(pass);
                 p.setTelef1(telef1);
                 p.setTelef2(telef2);
-
+                p.setFecha(fecha);
                 lista.add(p);
 
             } while(c.moveToNext());
@@ -142,6 +144,7 @@ public class SQlitePresenter extends SQLiteOpenHelper {
                     String image = c.getString(6);
                     p.setImage(image);
                 }
+                String fecha=c.getString(7);
 
                 p.setId(id1);
                 p.setUser(nombre1);
@@ -149,7 +152,7 @@ public class SQlitePresenter extends SQLiteOpenHelper {
                 p.setPassword(pass);
                 p.setTelef1(telef1);
                 p.setTelef2(telef2);
-
+                p.setFecha(fecha);
                 lista.add(p);
 
             } while(c.moveToNext());

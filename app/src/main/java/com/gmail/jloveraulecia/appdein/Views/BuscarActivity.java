@@ -85,7 +85,7 @@ public class BuscarActivity extends AppCompatActivity {
                 Log.d("a ver...", ""+people.size());
 
                 if(people.isEmpty()){
-                    Toast.makeText(myContext, "Todos loc campos están vacíos!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(myContext, "No exiten registros asi!", Toast.LENGTH_SHORT).show();
                 }else{
                     intent.putExtra("people", people);
                     restartListadoActivity();

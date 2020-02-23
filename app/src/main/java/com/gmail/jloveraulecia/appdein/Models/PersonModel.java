@@ -39,6 +39,7 @@ public class PersonModel {
                     String image = c.getString(6);
                     p.setImage(image);
                 }
+                String fecha=c.getString(7);
 
                 p.setId(id);
                 p.setUser(nombre);
@@ -46,6 +47,8 @@ public class PersonModel {
                 p.setPassword(pass);
                 p.setTelef1(telef1);
                 p.setTelef2(telef2);
+                p.setFecha(fecha);
+
 
                 lista.add(p);
 

@@ -42,6 +42,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import org.w3c.dom.Text;
+
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -63,7 +65,7 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
     private int mes;
     private int ano;
     private TextInputEditText nombreEditText, emailEditText, contEditText;
-    private EditText tel1EditText, tel2EditText;
+    private EditText tel1EditText, tel2EditText, fechaEditText;
     private ImageButton bImagen;
 
     //cosas que deberian ir en el presentador para abrir la galeria
@@ -103,12 +105,14 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
             String password=getIntent().getStringExtra("password");
             int telef1=getIntent().getIntExtra("telef1",0);
             int telef2=getIntent().getIntExtra("telef2",0);
+            String fecha=getIntent().getStringExtra("fecha");
             emailEditText.setText(user);
             nombreEditText.setText(email);
             contEditText.setText(password);
             tel1EditText = (EditText) findViewById(R.id.editText4);
             tel1EditText.setText(""+telef1);
             mySpinner.setAdapter(adapter);
+            fechaEditText.setText(fecha);
 
             String image=getIntent().getStringExtra("image");
             byte[] decodedString = Base64.decode(image, Base64.DEFAULT);
@@ -149,6 +153,7 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
                     person.setUser(nombreEditText.getText().toString());
                     person.setEmail(emailEditText.getText().toString());
                     person.setPassword(contEditText.getText().toString());
+                    person.setFecha(textFecha.getText().toString());
                     /*try {
                         person.setTelef1(Integer.parseInt(tel1EditText.getText().toString()));
                     }catch (NullPointerException e){
@@ -203,11 +208,11 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
                         person.setUser(nombreEditText.getText().toString());
                         person.setEmail(emailEditText.getText().toString());
                         person.setPassword(contEditText.getText().toString());
-
+                        person.setFecha(textFecha.getText().toString());
                         try {
                             person.setTelef1(Integer.parseInt(tel1EditText.getText().toString()));
                         }catch (NullPointerException e){
-                            Log.d(FORM_ACTIVITY_TAG, e.toString());
+                            Log.d(FORM_ACTIVITY_TAG, "No se ha recogido el telefono por algun error");
                         }
 
                         formPresentador.actualizarPersonSQL(person, myContext);
