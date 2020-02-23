@@ -63,9 +63,14 @@ public class ListadoActivity extends AppCompatActivity implements ListadoInterfa
         presenter = new ListadoPresenter(this);
         //presenter.insertarRegistrosPrueba(this);
 
-        //LLAMAMOS AL SELECT PARA LLENAR CON LOS REGISTROS EL RECICLEDVIEW
-        iniciarReciclerView();
 
+        Button b2= (Button) findViewById(R.id.button4);
+        b2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                iniciarReciclerView();
+            }
+        });
 
         FloatingActionButton fab = findViewById(R.id.botonFlotante);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -79,6 +84,34 @@ public class ListadoActivity extends AppCompatActivity implements ListadoInterfa
 
     }
 
+
+    public boolean importarInformacion() {
+        Intent startingIntent = getIntent();
+        if (startingIntent != null && getIntent().getSerializableExtra("people")!=null) {
+            Bundle b = startingIntent.getBundleExtra("android.intent.extra.INTENT");
+            //recibimos la lista de personas
+            Log.d("listado","??");
+            personList=(ArrayList<Person>) getIntent().getSerializableExtra("people");
+
+            Log.d("listado","??"+personList.size());
+            return true;
+        }
+        return false;
+    }
+
+    private void filtarInfoRecibida() {
+        //Seguimos con el adaptador del click en usuarios
+        listadoRecyclerView = findViewById(R.id.recyclerView);
+
+        // Crea el Adaptador con los datos de la lista recibida
+        adaptador = new PersonAdapter(personList);
+        Log.d("?xD", personList.size()+" "+personList.toString());
+        // Asocia el Adaptador al RecyclerView
+        listadoRecyclerView.setAdapter(adaptador);
+
+        // Muestra el RecyclerView en vertical
+        listadoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
 
     public void iniciarReciclerView(){
         //Seguimos con el adaptador del click en usuarios
@@ -232,7 +265,16 @@ public class ListadoActivity extends AppCompatActivity implements ListadoInterfa
         super.onResume();//visible
 
         showLog("Activity resumed");
-        iniciarReciclerView();
+        boolean buscado=importarInformacion();
+
+        //LLAMAMOS AL SELECT PARA LLENAR CON LOS REGISTROS EL RECICLEDVIEW
+        if(!buscado) {
+            iniciarReciclerView();
+        }else{
+            filtarInfoRecibida();
+            TextView t=(TextView) findViewById(R.id.textView5);
+            t.setText("Numero de Usuarios: "+personList.size());
+        }
     }
 
     @Override

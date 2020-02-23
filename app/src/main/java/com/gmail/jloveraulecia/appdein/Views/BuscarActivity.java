@@ -1,10 +1,12 @@
 package com.gmail.jloveraulecia.appdein.Views;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
+import com.gmail.jloveraulecia.appdein.Models.Person;
 import com.gmail.jloveraulecia.appdein.Presenter.BuscarPresenter;
 import com.gmail.jloveraulecia.appdein.Presenter.SQlitePresenter;
 import com.gmail.jloveraulecia.appdein.R;
@@ -17,11 +19,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+
 public class BuscarActivity extends AppCompatActivity {
     private static final String LIST_SEARCH_TAG = BuscarActivity.class.getSimpleName();
     EditText campoId, campoEmail, campoUser;
-    private BuscarPresenter presenter;
-
+    private BuscarPresenter presenter=new BuscarPresenter();
+    private Context myContext;
+    private Intent intent;
     SQlitePresenter conn;
 
     private void showLog(String text){
@@ -34,7 +40,10 @@ public class BuscarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buscar);
 
-        conn=new SQlitePresenter(this, "db_person", null, 1);
+        conn=new SQlitePresenter(this, "DBUsuarios", null, 1);
+
+        myContext=this;
+        intent= new Intent(BuscarActivity.this, ListadoActivity.class);
 
         campoId= (EditText) findViewById(R.id.editTextId);
         campoEmail= (EditText) findViewById(R.id.editTextEmail);
@@ -44,19 +53,57 @@ public class BuscarActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String email=null, nombre=null, id=null;
+                boolean lleno1=false, lleno2=false, lleno3=false;
+                //Compruebo que los campos no están vacíos
+                if(!campoId.getText().toString().equals("")){
+                    id=campoId.getText().toString();
+                    lleno1=true;
+                }
+                if(!campoUser.getText().toString().equals("")) {
+                    nombre = campoUser.getText().toString();
+                    lleno2=true;
+                }
+                if(!campoEmail.getText().toString().equals("")) {
+                    email = campoEmail.getText().toString();
+                    lleno3=true;
+                }
+                Log.d("hola", ""+lleno1+","+lleno2+","+lleno3);
 
+                ArrayList<Person> people=new ArrayList<>();
+                if(lleno1 && !lleno2 && !lleno3){
+                    Log.d("ID", "aqui entra");
+                    people=conn.getPersonById(myContext,id);
+                }else if(!lleno1 && lleno2 && !lleno3){
+                    people=conn.getPersonByNombre(myContext, nombre);
+                    Log.d("nonbre", "aqui entra");
+                }else if(!lleno1 && !lleno2 && lleno3){
+                    people=conn.getPersonByEmail(myContext, email);
+                    Log.d("email", "aqui entra");
+                }
+
+                Log.d("a ver...", ""+people.size());
+
+                if(people.isEmpty()){
+                    Toast.makeText(myContext, "Todos loc campos están vacíos!", Toast.LENGTH_SHORT).show();
+                }else{
+                    intent.putExtra("people", people);
+                    restartListadoActivity();
+                }
             }
         });
 
 
     }
 
-    public void onClick(View view){
-        switch(view.getId()){
-            case R.id.button5:
-                consultar();
-                break;
-        }
+    private void restartListadoActivity() {
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivityForResult(intent, 0);
     }
     public void consultar(){
         SQLiteDatabase db=conn.getReadableDatabase();
@@ -118,10 +165,6 @@ public class BuscarActivity extends AppCompatActivity {
         super.onPause();//invisible
 
         showLog("Activity paused");
-
-        Intent ListIntent = new Intent(BuscarActivity.this, ListadoActivity.class);
-        startActivity(ListIntent);
-        finish();
 
     }
 

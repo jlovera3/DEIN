@@ -1,6 +1,8 @@
 package com.gmail.jloveraulecia.appdein.Models;
 
-public class Person {
+import java.io.Serializable;
+
+public class Person implements Serializable {
     private Integer id=null;
     private String user ="";
     private String email ="";

@@ -55,8 +55,7 @@ public class PersonModel {
         return lista;
     }
 
-    public Person getPerson(String user) {
-        return new Person();
-    }
 
 }
+
+

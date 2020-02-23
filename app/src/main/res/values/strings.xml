@@ -28,8 +28,9 @@
     <string name="abrir_galeria">Abrir galeria</string>
     <string name="BuscarPorEmail">Buscar por Email</string>
     <string name="BuscarPorNombre">Buscar por Nombre</string>
-    <string name="choose_picture" />
-    <string name="Id_de_usuario">ID de Usuario</string>
+    <string name="choose_picture" translatable="false">Escoger imagen</string>
+    <string name="Id_de_usuario" translatable="false">ID de Usuario</string>
     <string name="actualizar">Actualizar</string>
     <string name="eliminar">Eliminar</string>
+    <string name="refrescar" translatable="false">Refrescar</string>
 </resources>
