@@ -29,6 +29,7 @@ public class BuscarPresenter extends AppCompatActivity {
 
         ArrayList<Person> lista=new ArrayList<>();
         //aqui iria la consulta a la base de datos
+        modelo= new PersonModel(context, "DBUsuraios", null, 1);
         lista=modelo.getPersonById(context, id);
         return lista;
     }
@@ -37,6 +38,7 @@ public class BuscarPresenter extends AppCompatActivity {
 
         ArrayList<Person> lista=new ArrayList<>();
         //aqui iria la consulta a la base de datos
+        modelo= new PersonModel(myContext, "DBUsuraios", null, 1);
         lista=modelo.getPersonByNombre(myContext, nombre);
         return lista;
     }
@@ -44,6 +46,7 @@ public class BuscarPresenter extends AppCompatActivity {
     public ArrayList<Person> getPersonByEmail(Context myContext, String email) {
         ArrayList<Person> lista=new ArrayList<>();
         //aqui iria la consulta a la base de datos
+        modelo= new PersonModel(myContext, "DBUsuraios", null, 1);
         lista=modelo.getPersonByEmail(myContext, email);
         return lista;
     }

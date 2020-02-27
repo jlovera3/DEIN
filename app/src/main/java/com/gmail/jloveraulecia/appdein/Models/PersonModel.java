@@ -15,7 +15,7 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 
 public class PersonModel extends SQLiteOpenHelper {
-    private PersonModel conn=null;
+    public PersonModel conn=null;
 
     //Sentencia SQL para crear la tabla de Usuarios
     String sqlCreate = "CREATE TABLE Usuarios(id INTEGER PRIMARY KEY, nombre TEXT, email TEXT, password TEXT, telef1 INTEGER, telef2 INTEGER, image BLOB, fecha TEXT)";
@@ -44,7 +44,7 @@ public class PersonModel extends SQLiteOpenHelper {
         conn= new PersonModel(context, "DBUsuarios", null, 1);
         SQLiteDatabase db =this.getWritableDatabase();
         Cursor c = db.rawQuery(" SELECT * FROM Usuarios ", null);
-
+        Log.d("GetAll", "Punto1");
         //Nos aseguramos de que existe al menos un registro
         if (c.moveToFirst()) {
             //Recorremos el cursor hasta que no haya más registros

@@ -33,6 +33,7 @@ public class ListadoPresenter implements ListadoInterface.Presenter{
     //HAY QUE IMPLEMENTAR UN METODO QUE MUESTRE UN TOAST AL ELIMINAR UN ELEMENTO
 
     public ArrayList<Person> getAllPerson(Context context){
+        conn=new PersonModel(context, "DBUsuarios", null, 1);
         ChangeNumberOfUsers(context);
         return conn.getAllPerson(context);
     }
