@@ -13,11 +13,10 @@ import java.util.ArrayList;
 
 public class ListadoPresenter implements ListadoInterface.Presenter{
     private ListadoInterface.View view;
-    private static PersonModel person;
+    private static PersonModel conn;
 
     public ListadoPresenter(ListadoInterface.View view){
         this.view = view;
-        person = new PersonModel();
     }
 
     @Override
@@ -35,7 +34,7 @@ public class ListadoPresenter implements ListadoInterface.Presenter{
 
     public ArrayList<Person> getAllPerson(Context context){
         ChangeNumberOfUsers(context);
-        return person.getAllPerson(context);
+        return conn.getAllPerson(context);
     }
 
 
@@ -47,12 +46,12 @@ public class ListadoPresenter implements ListadoInterface.Presenter{
 
     @Override
     public int ChangeNumberOfUsers(Context context) {
-        return person.getAllPerson(context).size();
+        return conn.getAllPerson(context).size();
     }
 
-    public void insertarRegistrosPrueba(Context context) {
-        SQlitePresenter conexion= new SQlitePresenter(context, "DBUsuarios", null, 1);
-        SQLiteDatabase db =conexion.getWritableDatabase();
+    /*public void insertarRegistrosPrueba(Context context) {
+        conn= new PersonModel(context, "DBUsuarios", null, 1);
+        SQLiteDatabase db =conn.getWritableDatabase();
 
         if(db != null){
             for(int i=1;i<6; i++) {
@@ -66,19 +65,11 @@ public class ListadoPresenter implements ListadoInterface.Presenter{
             }
         }
         db.close();
-    }
+    }*/
 
     public void removeOne(Person person, Context context) {
-        SQlitePresenter conexion= new SQlitePresenter(context, "DBUsuarios", null, 1);
-        SQLiteDatabase db =conexion.getWritableDatabase();
-
-        try {
-            db.delete("Usuarios", "id=" + person.getId(), null);
-            Log.d("Listado Presenter", "Eliminado correctamente a "+person.toString());
-        }catch (SQLException e){
-            Log.d("Listado_Presenter", "No se ha podido eliminar");
-        }
-        db.close();
+        conn= new PersonModel(context, "DBUsuarios", null, 1);
+        conn.removeOne(person,context);
     }
 
 }

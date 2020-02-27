@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.WindowManager;
 
-import com.gmail.jloveraulecia.appdein.Presenter.SQlitePresenter;
 import com.gmail.jloveraulecia.appdein.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -45,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
             }
         },5000);
 
-        SQlitePresenter conn=new SQlitePresenter(this, "db_person", null, 1);
     }
 
     @Override

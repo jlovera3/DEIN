@@ -16,14 +16,35 @@ import com.gmail.jloveraulecia.appdein.R;
 import java.util.ArrayList;
 
 public class BuscarPresenter extends AppCompatActivity {
-
+    private PersonModel modelo;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buscar);
     }
 
 
+    public ArrayList<Person> getPersonById(Context context, String id) {
+
+        ArrayList<Person> lista=new ArrayList<>();
+        //aqui iria la consulta a la base de datos
+        lista=modelo.getPersonById(context, id);
+        return lista;
+    }
+
+    public ArrayList<Person> getPersonByNombre(Context myContext, String nombre) {
+
+        ArrayList<Person> lista=new ArrayList<>();
+        //aqui iria la consulta a la base de datos
+        lista=modelo.getPersonByNombre(myContext, nombre);
+        return lista;
+    }
+
+    public ArrayList<Person> getPersonByEmail(Context myContext, String email) {
+        ArrayList<Person> lista=new ArrayList<>();
+        //aqui iria la consulta a la base de datos
+        lista=modelo.getPersonByEmail(myContext, email);
+        return lista;
+    }
 }

@@ -7,8 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import com.gmail.jloveraulecia.appdein.Models.Person;
+import com.gmail.jloveraulecia.appdein.Models.PersonModel;
 import com.gmail.jloveraulecia.appdein.Presenter.BuscarPresenter;
-import com.gmail.jloveraulecia.appdein.Presenter.SQlitePresenter;
 import com.gmail.jloveraulecia.appdein.R;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,7 +19,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 public class BuscarActivity extends AppCompatActivity {
@@ -28,7 +27,8 @@ public class BuscarActivity extends AppCompatActivity {
     private BuscarPresenter presenter=new BuscarPresenter();
     private Context myContext;
     private Intent intent;
-    SQlitePresenter conn;
+    BuscarPresenter conn;
+    PersonModel model;
 
     private void showLog(String text){
 
@@ -40,7 +40,7 @@ public class BuscarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buscar);
 
-        conn=new SQlitePresenter(this, "DBUsuarios", null, 1);
+        conn=new BuscarPresenter();
 
         myContext=this;
         intent= new Intent(BuscarActivity.this, ListadoActivity.class);
@@ -72,14 +72,11 @@ public class BuscarActivity extends AppCompatActivity {
 
                 ArrayList<Person> people=new ArrayList<>();
                 if(lleno1 && !lleno2 && !lleno3){
-                    Log.d("ID", "aqui entra");
                     people=conn.getPersonById(myContext,id);
                 }else if(!lleno1 && lleno2 && !lleno3){
                     people=conn.getPersonByNombre(myContext, nombre);
-                    Log.d("nonbre", "aqui entra");
                 }else if(!lleno1 && !lleno2 && lleno3){
                     people=conn.getPersonByEmail(myContext, email);
-                    Log.d("email", "aqui entra");
                 }
 
                 Log.d("a ver...", ""+people.size());
@@ -106,7 +103,7 @@ public class BuscarActivity extends AppCompatActivity {
         startActivityForResult(intent, 0);
     }
     public void consultar(){
-        SQLiteDatabase db=conn.getReadableDatabase();
+        SQLiteDatabase db=model.getReadableDatabase();
         String[] parametros= {campoId.getText().toString()};
         String[] campos= {"Id", "Nombre", "Email"};
 

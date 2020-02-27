@@ -21,12 +21,14 @@ import androidx.core.content.ContextCompat;
 
 import com.gmail.jloveraulecia.appdein.Interfaces.FormularioInterface;
 import com.gmail.jloveraulecia.appdein.Models.Person;
+import com.gmail.jloveraulecia.appdein.Models.PersonModel;
 import com.gmail.jloveraulecia.appdein.R;
 import com.gmail.jloveraulecia.appdein.Views.FormularioActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 
 public class FormularioPresenter implements FormularioInterface.Presenter {
@@ -34,6 +36,7 @@ public class FormularioPresenter implements FormularioInterface.Presenter {
     final String pathFotos = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/demoAndroidImages/";
     private Uri uri;
     private FormularioInterface.View view;
+    private PersonModel conn;
 
 
     public FormularioPresenter(FormularioInterface.View view){
@@ -42,61 +45,26 @@ public class FormularioPresenter implements FormularioInterface.Presenter {
 
     @Override
     public void registrarPerson(Context context, Person person){
-
-        SQlitePresenter conn= new SQlitePresenter(context, "DBUsuarios", null, 1);
-        SQLiteDatabase db=conn.getWritableDatabase();
-
-        ContentValues values=new ContentValues();
-
-        values.put("nombre", person.getUser());
-        values.put("email", person.getEmail());
-        values.put("password", person.getPassword());
-        values.put("telef1", person.getTelef1());
-        values.put("telef2",person.getTelef2());
-        values.put("image", person.getImage());
-
-        db.insert("Usuarios", null, values);
-
-        Toast.makeText(context, "Insertado correctamente", Toast.LENGTH_SHORT).show();
-
-        db.close();
+        conn= new PersonModel(context, "DBUsuarios", null, 1);
+        conn.registrarPerson(context,person);
     }
 
-
-    /*public void registrarPersonSQL(Context context, Person person){
-        SQlitePresenter conn= new SQlitePresenter(context, "DBUsuarios", null, 1);
-        SQLiteDatabase db=conn.getWritableDatabase();
-
-        String insert="INSERT INTO Usuarios (nombre, email, password, telef1, telef2, image) VALUES" +
-                " ('"+person.getUser()+"','"+person.getEmail()+"','"+person.getPassword()+"',"+person.getTelef1()+","+person.getTelef2()+",'"+person.getImage()+"');";
-
-        db.execSQL(insert);
-
-        db.close();
-    }*/
 
     public void actualizarPersonSQL(Person person, Context myContext) {
-        SQlitePresenter conexion= new SQlitePresenter(myContext, "DBUsuarios", null, 1);
-        SQLiteDatabase db =conexion.getWritableDatabase();
-
-        try {
-            //Establecemos los campos-valores a actualizar
-            ContentValues valores = new ContentValues();
-            valores.put("nombre",person.getUser());
-            valores.put("email", person.getEmail());
-            valores.put("password", person.getPassword());
-            valores.put("telef1", person.getTelef1());
-            valores.put("image", person.getImage());
-
-            //Actualizamos el registro en la base de datos
-            db.update("Usuarios", valores, "id="+person.getId(), null);
-            Log.d("Listado Presenter", "Actualizado correctamente a "+person.toString());
-        }catch (SQLException e){
-            Log.d("Listado_Presenter", "No se ha podido eliminar");
-        }
-        db.close();
+        conn= new PersonModel(myContext, "DBUsuarios", null, 1);
+        conn.actualizarPersonSQL(person, myContext);
     }
 
+
+    public void deletePersonSQL(Person person, Context myContext) {
+        conn= new PersonModel(myContext, "DBUsuarios", null, 1);
+        conn.deletePersonSQL(person,myContext);
+    }
+
+    public ArrayList<Person> getAllPerson(Context myContext){
+        conn= new PersonModel(myContext, "DBUsuarios", null, 1);
+        return conn.getAllPerson(myContext);
+    }
 
 
     @Override
@@ -158,18 +126,6 @@ public class FormularioPresenter implements FormularioInterface.Presenter {
         return bmp;
     }
 
-    public void deletePersonSQL(Person person, Context myContext) {
-        SQlitePresenter conexion= new SQlitePresenter(myContext, "DBUsuarios", null, 1);
-        SQLiteDatabase db =conexion.getWritableDatabase();
-
-        try {
-            db.delete("Usuarios", "id=" + person.getId(), null);
-            Log.d("Listado Presenter", "Eliminado correctamente a "+person.toString());
-        }catch (SQLException e){
-            Log.d("Listado_Presenter", "No se ha podido eliminar");
-        }
-        db.close();
-    }
 
 
 }

@@ -8,14 +8,11 @@ import androidx.core.app.ActivityCompat;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -35,19 +32,14 @@ import com.gmail.jloveraulecia.appdein.Interfaces.FormularioInterface;
 import com.gmail.jloveraulecia.appdein.Models.Person;
 import com.gmail.jloveraulecia.appdein.Models.PersonModel;
 import com.gmail.jloveraulecia.appdein.Presenter.FormularioPresenter;
-import com.gmail.jloveraulecia.appdein.Presenter.ListadoPresenter;
-import com.gmail.jloveraulecia.appdein.Presenter.SQlitePresenter;
 import com.gmail.jloveraulecia.appdein.R;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-import org.w3c.dom.Text;
-
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 public class FormularioActivity extends AppCompatActivity implements FormularioInterface.View {
     final private int CODE_READ_EXTERNAL_STORAGE_PERMISSION=123;
@@ -88,8 +80,6 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
         layout=findViewById(R.id.Layout);
 
         formPresentador = new FormularioPresenter(this);
-
-        SQlitePresenter conn= new SQlitePresenter(this, "db_person", null, 1);
 
         //MÉTODO PARA INICIAR LISTENERS DE LOS EDITTEXT Y SUS VALIDACIONES
         iniciarValidaciones();
@@ -185,8 +175,7 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
                 if (getIntent().getIntExtra("id", 0) != 0) {
                     Person person = new Person();
                     int id = getIntent().getIntExtra("id", 0);
-                    PersonModel personModel = new PersonModel();
-                    ArrayList<Person> people = personModel.getAllPerson(myContext);
+                    ArrayList<Person> people = formPresentador.getAllPerson(myContext);
                     for (int i = 0; i < people.size(); i++) {
                         if (id == people.get(i).getId()) {
                             person = people.get(i);
@@ -242,8 +231,7 @@ public class FormularioActivity extends AppCompatActivity implements FormularioI
                 if (getIntent().getIntExtra("id", 0) != 0) {
                     Person person = new Person();
                     int id = getIntent().getIntExtra("id", 0);
-                    PersonModel personModel = new PersonModel();
-                    ArrayList<Person> people = personModel.getAllPerson(myContext);
+                    ArrayList<Person> people = formPresentador.getAllPerson(myContext);
                     for (int i = 0; i < people.size(); i++) {
                         if (id == people.get(i).getId()) {
                             person = people.get(i);

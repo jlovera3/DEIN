@@ -7,12 +7,9 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -24,8 +21,8 @@ import android.widget.Toast;
 
 import com.gmail.jloveraulecia.appdein.Interfaces.ListadoInterface;
 import com.gmail.jloveraulecia.appdein.Models.Person;
+import com.gmail.jloveraulecia.appdein.Models.PersonModel;
 import com.gmail.jloveraulecia.appdein.Presenter.ListadoPresenter;
-import com.gmail.jloveraulecia.appdein.Presenter.SQlitePresenter;
 import com.gmail.jloveraulecia.appdein.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -41,7 +38,7 @@ public class ListadoActivity extends AppCompatActivity implements ListadoInterfa
     private ListadoPresenter presenter;
     private Context myContext;
 
-    SQlitePresenter conn;
+    PersonModel conn;
 
     private void showLog(String text){
 
